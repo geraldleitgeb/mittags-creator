@@ -140,8 +140,11 @@ textarea{resize:none;}
 <!-- 0 API KEY -->
 <div class="section">
   <h2><span class="badge">0</span> Claude API Key</h2>
-  <input type="password" id="apiKey" placeholder="sk-ant-..." oninput="saveKey()">
-  <div class="api-status" id="apiStatus">🔑 Key wird lokal gespeichert · console.anthropic.com</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input type="password" id="apiKey" placeholder="sk-ant-..." oninput="saveKey()" style="flex:1;">
+    <button onclick="resetKey()" style="background:rgba(245,240,232,0.1);border:1px solid rgba(245,240,232,0.2);color:rgba(245,240,232,0.6);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;white-space:nowrap;" title="Key löschen">× Reset</button>
+  </div>
+  <div class="api-status" id="apiStatus">🔑 Key wird lokal gespeichert · <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#F97545;">console.anthropic.com</a></div>
 </div>
 
 <!-- 1 MODUS & FORMAT -->
@@ -161,6 +164,7 @@ textarea{resize:none;}
 <div class="section">
   <h2><span class="badge">2</span> <span id="fotoTitle">Foto</span></h2>
   <div id="slideTabs" class="slide-tabs" style="display:none;"></div>
+  <p id="carouselFotoHint" style="display:none;color:rgba(245,240,232,0.5);font-size:13px;margin:0 0 10px;text-align:center;">📸 Ein Foto für alle Slides – KI textet jede Slide individuell.</p>
   <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
     <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
     <div class="upload-icon">📷</div>
@@ -244,7 +248,8 @@ textarea{resize:none;}
   <button class="btn-zip" onclick="renderAllZip()">📦 ZIP herunterladen</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
 // ── Carousel Slide Builder ──
 const CTPLS = ['E','D1','D2','D3','A','B','VD','VDF'];
 let cSlides = [
@@ -316,7 +321,7 @@ Antworte NUR mit einem gültigen JSON-Objekt:
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:250,messages:[{role:'user',content:prompt}]})
     });
     const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    if(data.error){const msg=data.error.message||data.error.type;if(msg.includes('api_key')||msg.includes('x-api-key')||data.error.type==='authentication_error')throw new Error('Ungültiger API Key → bitte oben auf "× Reset" klicken und neuen Key eingeben');throw new Error(msg);}
     const raw=data.content[0].text.trim();
     const json=JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
     cSlides[i]={...cSlides[i],head1:json.head1||'',head2:json.head2||'',body:json.body||'',tpl:CTPLS[i%CTPLS.length],done:true};
@@ -352,7 +357,6 @@ function delCSlide(i){
   cSlides.splice(i,1);
   renderCarouselGrid();
 }
-
 </script>
 <script>
 'use strict';
@@ -374,6 +378,7 @@ window.addEventListener('load',()=>{
   const k=localStorage.getItem('mgk_k');
   if(k){document.getElementById('apiKey').value=k;document.getElementById('apiStatus').textContent='✅ Key gespeichert · console.anthropic.com';}
 });
+function resetKey(){localStorage.removeItem('mgk_k');document.getElementById('apiKey').value='';document.getElementById('apiStatus').textContent='🔑 Key gelöscht – bitte neu eingeben';}
 function saveKey(){const k=document.getElementById('apiKey').value.trim();if(k){localStorage.setItem('mgk_k',k);document.getElementById('apiStatus').textContent='✅ Key gespeichert';}}
 
 // ── Mode ──
@@ -390,6 +395,7 @@ function setMode(m){
   document.getElementById('fotoTitle').textContent=carousel?'Foto hochladen':'Foto';
   document.getElementById('btnAIAll').style.display='none';
   document.getElementById('carouselDlSection').style.display=carousel?'block':'none';
+  document.getElementById('carouselFotoHint').style.display=carousel?'block':'none';
   if(carousel){renderCarouselGrid();}
   else{renderTabs();loadSlide(cur);}
 }
@@ -475,7 +481,7 @@ async function apiFetch(idea,multi){
   const sys=SYSTEM_PROMPT+(multi?'\n\nERSTELLE 3 VERSCHIEDENE VARIANTEN mit verschiedenen Winkeln. Antworte als JSON-Array:\n'+MULTI_SUFFIX:'\n'+SINGLE_SUFFIX);
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:multi?1200:512,system:sys,messages:[{role:'user',content:(multi?'3 Varianten':'Post') +' fuer:\n\n'+idea}]})});
   const d=await r.json();
-  if(!r.ok)throw new Error(d.error?.message||'API Fehler '+r.status);
+  if(!r.ok){const em=d.error?.message||'API Fehler '+r.status;if(r.status===401||em.includes('api_key'))throw new Error('Ungültiger API Key → oben auf "× Reset" klicken und neuen Key von console.anthropic.com eingeben');throw new Error(em);}
   const txt=d.content[0].text;
   if(multi){const m=txt.match(/\[[\s\S]*\]/);if(!m)throw new Error('Array nicht parsbar');return JSON.parse(m[0]);}
   else{const m=txt.match(/\{[\s\S]*\}/);if(!m)throw new Error('JSON nicht parsbar');return JSON.parse(m[0]);}
