@@ -102,6 +102,32 @@ textarea{resize:none;}
 .tpl-swap-section{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(245,240,232,0.1);}
 .tpl-swap-section.vis{display:block;}
 .tpl-swap-lbl{font-size:10px;opacity:0.45;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+
+/* ── Carousel Builder ── */
+.c-hint{color:rgba(245,240,232,0.5);font-size:13px;margin:-4px 0 12px;text-align:center;}
+.c-slide-list{display:flex;flex-direction:column;gap:14px;margin-bottom:16px;}
+.c-slide-card{background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.12);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.c-slide-header{display:flex;justify-content:space-between;align-items:center;}
+.c-slide-num{font-family:'Pally',sans-serif;font-weight:700;color:#F97545;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+.c-del-btn{background:none;border:none;cursor:pointer;font-size:16px;opacity:0.5;padding:4px;}
+.c-del-btn:hover{opacity:1;}
+.c-topic-input{background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.15);border-radius:10px;padding:10px 12px;color:#F5F0E8;font-size:15px;width:100%;box-sizing:border-box;resize:none;min-height:52px;font-family:inherit;}
+.c-topic-input::placeholder{color:rgba(245,240,232,0.35);}
+.c-topic-input:focus{outline:none;border-color:#F97545;}
+.c-preview-outer{width:100%;aspect-ratio:1;background:rgba(0,0,0,0.25);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.c-preview-outer canvas{width:100%;height:100%;display:block;}
+.c-placeholder{color:rgba(245,240,232,0.3);font-size:13px;text-align:center;padding:24px;}
+.c-loading-inner{text-align:center;padding:20px;}
+.c-spin-sm{width:28px;height:28px;border:2px solid rgba(249,117,69,0.25);border-top-color:#F97545;border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 6px;}
+.c-err{color:#ff6b6b;font-size:12px;padding:10px;text-align:center;}
+.c-slide-btns{display:flex;gap:8px;}
+.btn-gen-slide{flex:1;background:linear-gradient(135deg,#F97545,#E5603A);color:#fff;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-refresh-slide{flex:1;background:rgba(249,117,69,0.15);border:1px solid rgba(249,117,69,0.4);color:#F97545;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.c-done-badge{font-size:11px;color:rgba(245,240,232,0.5);text-align:right;}
+.c-actions{display:flex;gap:10px;margin-bottom:14px;}
+.btn-add-slide{flex:1;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.18);color:#F5F0E8;border-radius:10px;padding:12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.btn-add-slide:hover{background:rgba(245,240,232,0.14);}
+.btn-gen-all{flex:2;background:linear-gradient(135deg,#F97545,#E5603A);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 </style>
 </head>
 <body>
@@ -125,8 +151,8 @@ textarea{resize:none;}
     <button class="mode-btn active" id="btnSingle" onclick="setMode('single')">◼ Einzelbild</button>
     <button class="mode-btn" id="btnCarousel" onclick="setMode('carousel')">▦ Carousel</button>
   </div>
-  <div class="row">
-    <button class="pill active" data-fmt="square" onclick="setFmt(this)">◼ Feed 1:1</button>
+  <div class="row" id="fmtRow">
+    <button class="pill active" data-fmt="square" onclick="setFmt(this)">◼ Feed 3:4</button>
     <button class="pill" data-fmt="story" onclick="setFmt(this)">▬ Story 9:16</button>
   </div>
 </div>
@@ -149,7 +175,7 @@ textarea{resize:none;}
 </div>
 
 <!-- 3 IDEE & KI -->
-<div class="section">
+<div class="section" id="ideaSection">
   <h2><span class="badge">3</span> Idee eingeben → KI macht den Rest</h2>
   <div class="idea-box">
     <textarea id="idea" placeholder="z.B.: Glöcklbräu, jeden Mittwoch gibt es ihr berühmtes gebackenes Cordon Bleu, Stammgäste kommen extra dafür, gemütliches Wirtshaus-Flair..."></textarea>
@@ -206,14 +232,128 @@ textarea{resize:none;}
   <button class="btn-render" onclick="renderManual()">▶ Vorschau aktualisieren</button>
 </div>
 
-<!-- 5 CAROUSEL DOWNLOAD -->
+<!-- 5 CAROUSEL BUILDER -->
 <div class="section" id="carouselDlSection" style="display:none;">
-  <h2><span class="badge">5</span> Carousel Download</h2>
-  <div class="slide-dots" id="slideDots"></div>
-  <button class="btn-zip" id="btnZip" onclick="renderAllZip()">📦 Alle Slides als ZIP herunterladen</button>
+  <h2><span class="badge">3</span> Slides &amp; Texte</h2>
+  <p class="c-hint">Für jede Slide ein Thema eingeben – KI erstellt kreative Texte.</p>
+  <div id="cSlideList" class="c-slide-list"></div>
+  <div class="c-actions">
+    <button class="btn-add-slide" onclick="addCSlide()">+ Slide</button>
+    <button class="btn-gen-all" onclick="genAllCarousel()">✨ Alle generieren</button>
+  </div>
+  <button class="btn-zip" onclick="renderAllZip()">📦 ZIP herunterladen</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+// ── Carousel Slide Builder ──
+const CTPLS = ['E','D1','D2','D3','A','B','VD','VDF'];
+let cSlides = [
+  {topic:'',head1:'',head2:'',body:'',tpl:'E',done:false},
+  {topic:'',head1:'',head2:'',body:'',tpl:'D1',done:false},
+  {topic:'',head1:'',head2:'',body:'',tpl:'D2',done:false}
+];
+
+function renderCarouselGrid(){
+  const list = document.getElementById('cSlideList');
+  if(!list)return;
+  list.innerHTML='';
+  cSlides.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='c-slide-card';
+    card.id='cCard_'+i;
+    const previewHtml = s.done
+      ? '<canvas id="cCanvas_'+i+'" class="c-canvas" width="1080" height="1080"></canvas>'
+      : '<div class="c-placeholder">Noch nicht generiert</div>';
+    card.innerHTML=`
+      <div class="c-slide-header">
+        <span class="c-slide-num">Slide ${i+1}</span>
+        ${s.done?'<span class="c-done-badge">✅ Generiert</span>':''}
+        <button class="c-del-btn" onclick="delCSlide(${i})" title="Slide löschen">🗑</button>
+      </div>
+      <textarea class="c-topic-input" id="cTopic_${i}" placeholder="Thema für Slide ${i+1} (z.B. Cordon Bleu, Gemütliche Atmosphäre, Stammgäste…)">${s.topic||''}</textarea>
+      <div class="c-preview-outer" id="cPreview_${i}">${previewHtml}</div>
+      <div class="c-slide-btns">
+        <button class="btn-gen-slide" onclick="genCSlide(${i})">${s.done?'🔄 Refresh':'✨ Generieren'}</button>
+      </div>
+    `;
+    list.appendChild(card);
+    const ta=document.getElementById('cTopic_'+i);
+    if(ta)ta.addEventListener('input',e=>{cSlides[i].topic=e.target.value;});
+    if(s.done){requestAnimationFrame(()=>drawCSlide(i));}
+  });
+}
+
+function drawCSlide(i){
+  const s=cSlides[i];
+  if(!s.done)return;
+  const canvas=document.getElementById('cCanvas_'+i);
+  if(!canvas)return;
+  canvas.width=1080;canvas.height=1080;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,1080,1080);
+  drawSlide({...s,img:img},ctx,1080,1080,s.tpl||tpl);
+}
+
+async function genCSlide(i){
+  const topic=(cSlides[i].topic||'').trim();
+  if(!topic){alert('Bitte ein Thema für Slide '+(i+1)+' eingeben.');return;}
+  const apiKey=(document.getElementById('apiKey').value||'').trim();
+  if(!apiKey){alert('Bitte Claude API Key eingeben.');return;}
+  const preview=document.getElementById('cPreview_'+i);
+  if(preview)preview.innerHTML='<div class="c-loading-inner"><div class="c-spin-sm"></div><div style="color:rgba(245,240,232,0.6);font-size:13px">KI generiert…</div></div>';
+  const prompt=`Erstelle für einen Instagram-Mittagstipp-Post (Mittags-Geheimtipps Graz) auf Deutsch prägnante Texte.
+Thema/Stichwort für diese Slide: "${topic}"
+Slide: ${i+1} von ${cSlides.length}
+
+Regeln: head1 in GROSSBUCHSTABEN, max 18 Zeichen. head2 mixed case, max 22 Zeichen. body österreichisch-casual, max 55 Zeichen. Keine Emojis im Text.
+
+Antworte NUR mit einem gültigen JSON-Objekt:
+{"head1":"...","head2":"...","body":"..."}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:250,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.content[0].text.trim();
+    const json=JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+    cSlides[i]={...cSlides[i],head1:json.head1||'',head2:json.head2||'',body:json.body||'',tpl:CTPLS[i%CTPLS.length],done:true};
+    // Re-render card to show preview
+    renderCarouselGrid();
+    requestAnimationFrame(()=>drawCSlide(i));
+    // Scroll to card
+    const card=document.getElementById('cCard_'+i);
+    if(card)card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){
+    if(preview)preview.innerHTML='<div class="c-err">Fehler: '+e.message+'</div>';
+    console.error(e);
+  }
+}
+
+async function genAllCarousel(){
+  for(let i=0;i<cSlides.length;i++){await genCSlide(i);}
+}
+
+function addCSlide(){
+  if(cSlides.length>=8){alert('Maximal 8 Slides.');return;}
+  cSlides.push({topic:'',head1:'',head2:'',body:'',tpl:CTPLS[cSlides.length%CTPLS.length],done:false});
+  renderCarouselGrid();
+  // scroll to new slide
+  setTimeout(()=>{
+    const last=document.getElementById('cCard_'+(cSlides.length-1));
+    if(last)last.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function delCSlide(i){
+  if(cSlides.length<=1){alert('Mindestens 1 Slide.');return;}
+  cSlides.splice(i,1);
+  renderCarouselGrid();
+}
+
+</script>
 <script>
 'use strict';
 
@@ -241,12 +381,17 @@ function setMode(m){
   saveCur();carousel=m==='carousel';
   document.getElementById('btnSingle').classList.toggle('active',!carousel);
   document.getElementById('btnCarousel').classList.toggle('active',carousel);
-  document.getElementById('fotoTitle').textContent=carousel?'Slides & Fotos':'Foto';
-  document.getElementById('slideTabs').style.display=carousel?'flex':'none';
-  document.getElementById('btnAIAll').style.display=carousel?'block':'none';
+  // In carousel mode: hide idea section, format pills, slide tabs, variant section
+  // Show carousel builder section
+  document.getElementById('fmtRow').style.display=carousel?'none':'flex';
+  document.getElementById('ideaSection').style.display=carousel?'none':'block';
+  document.getElementById('variantSection').style.display='none';
+  document.getElementById('slideTabs').style.display='none';
+  document.getElementById('fotoTitle').textContent=carousel?'Foto hochladen':'Foto';
+  document.getElementById('btnAIAll').style.display='none';
   document.getElementById('carouselDlSection').style.display=carousel?'block':'none';
-  if(carousel&&slides.length<2)slides.push(mkSlide());
-  renderTabs();loadSlide(cur);
+  if(carousel){renderCarouselGrid();}
+  else{renderTabs();loadSlide(cur);}
 }
 function setFmt(btn){document.querySelectorAll('[data-fmt]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');fmt=btn.dataset.fmt;document.getElementById('previewWrap').className=fmt==='story'?'preview-wrap story':'preview-wrap';if(variants.length)renderGrid();}
 function setTpl(btn){
@@ -701,7 +846,7 @@ function selectVariant(i){
   document.querySelectorAll('.thumb-wrap').forEach((w,j)=>w.classList.toggle('sel',j===i));
   // Full preview
   const pw=document.getElementById('previewWrap');
-  const isStory=fmt==='story'; const CW=1080,CH=isStory?1920:1080;
+  const isStory=fmt==='story'; const CW=1080,CH=isStory?1920:carousel?1080:1440;
   const canvas=document.getElementById('canvas');
   canvas.width=CW;canvas.height=CH;
   pw.className=isStory?'preview-wrap story':'preview-wrap';
@@ -730,15 +875,35 @@ function renderManual(){
 function downloadSingle(){document.getElementById('canvas').toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mittagstipp_slide'+(cur+1)+'.jpg';a.click();},'image/jpeg',0.93);}
 
 async function renderAllZip(){
-  saveCur();
   if(typeof JSZip==='undefined'){alert('JSZip nicht geladen – Internetverbindung prüfen.');return;}
-  const isStory=fmt==='story',CW=1080,CH=isStory?1920:1080;
-  const zip=new JSZip(),oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
-  loader(true,'Slides rendern…');let count=0;
-  for(let i=0;i<slides.length;i++){octx.clearRect(0,0,CW,CH);if(drawSlide(slides[i],octx,CW,CH,tpl)){const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));zip.file('slide_'+(i+1)+'.jpg',blob);count++;}}
-  if(!count){loader(false);alert('Keine Slides mit Foto vorhanden.');return;}
-  const content=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download='mittags_carousel.zip';a.click();
-  loader(false);
+  if(carousel){
+    // Carousel mode: use cSlides
+    const CW=1080,CH=1080;
+    const zip=new JSZip(),oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
+    loader(true,'Slides rendern…');let count=0;
+    for(let i=0;i<cSlides.length;i++){
+      if(!cSlides[i].done)continue;
+      octx.clearRect(0,0,CW,CH);
+      const sd={...cSlides[i],img:img};
+      if(drawSlide(sd,octx,CW,CH,cSlides[i].tpl||tpl)){
+        const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));
+        zip.file('slide_'+(i+1)+'.jpg',blob);count++;
+      }
+    }
+    if(!count){loader(false);alert('Bitte zuerst mindestens eine Slide generieren.');return;}
+    const content=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download='mittags_carousel.zip';a.click();
+    loader(false);
+  } else {
+    // Single mode: render current slide
+    saveCur();
+    const isStory=fmt==='story',CW=1080,CH=isStory?1920:1440;
+    const zip=new JSZip(),oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
+    loader(true,'Slide rendern…');let count=0;
+    for(let i=0;i<slides.length;i++){octx.clearRect(0,0,CW,CH);if(drawSlide(slides[i],octx,CW,CH,tpl)){const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));zip.file('slide_'+(i+1)+'.jpg',blob);count++;}}
+    if(!count){loader(false);alert('Keine Slides mit Foto vorhanden.');return;}
+    const content=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download='mittags_carousel.zip';a.click();
+    loader(false);
+  }
 }
 </script>
 </body>
