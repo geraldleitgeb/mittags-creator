@@ -53,6 +53,17 @@ textarea{resize:none;}
 .btn-render{width:100%;background:#124E4A;color:#F5F0E8;border:2px solid rgba(245,240,232,0.2);border-radius:13px;padding:14px;font-family:'Pally',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
 .btn-dl{width:100%;background:#F5F0E8;color:#124E4A;border:none;border-radius:13px;padding:15px;font-family:'Pally',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px;display:none;}
 .btn-zip{width:100%;background:#F97545;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Pally',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;display:none;}
+/* ── Caption Section ── */
+.caption-section{margin-top:18px;padding-top:16px;border-top:1px solid rgba(245,240,232,0.12);}
+.caption-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.caption-title{font-size:13px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:.5px;}
+.btn-caption-refresh{background:rgba(249,117,69,0.15);color:#F97545;border:1.5px solid rgba(249,117,69,0.4);border-radius:8px;padding:5px 12px;font-family:'Pally',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.caption-textarea{width:100%;min-height:130px;background:rgba(0,0,0,0.3);border:1.5px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;font-family:'Pally',sans-serif;font-size:14px;padding:11px 13px;resize:vertical;outline:none;box-sizing:border-box;line-height:1.5;}
+.caption-textarea:focus{border-color:#F97545;}
+.caption-hint-input{width:100%;background:rgba(0,0,0,0.2);border:1.5px solid rgba(245,240,232,0.12);border-radius:8px;color:#F5F0E8;font-family:'Pally',sans-serif;font-size:13px;padding:8px 11px;margin-top:8px;outline:none;box-sizing:border-box;}
+.caption-hint-input:focus{border-color:#F97545;}
+.btn-gen-caption{width:100%;background:linear-gradient(135deg,rgba(249,117,69,0.15),rgba(249,117,69,0.05));color:#F97545;border:1.5px solid rgba(249,117,69,0.5);border-radius:13px;padding:13px;font-family:'Pally',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.btn-gen-caption:disabled{opacity:0.4;cursor:default;}
 /* ── VARIANT GRID ── */
 .variant-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;display:none;}
 .thumb-wrap{border-radius:10px;overflow:hidden;border:2.5px solid transparent;cursor:pointer;position:relative;background:#0a1a18;transition:border-color .2s;}
@@ -117,10 +128,51 @@ textarea{resize:none;}
 .c-preview-outer{width:100%;aspect-ratio:1;background:rgba(0,0,0,0.25);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
 .c-preview-outer canvas{width:100%;height:100%;display:block;}
 .c-placeholder{color:rgba(245,240,232,0.3);font-size:13px;text-align:center;padding:24px;}
+.c-slide-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:2px;}
+.c-mini-upload{width:68px;height:68px;flex-shrink:0;border-radius:10px;background:rgba(245,240,232,0.07);border:1.5px dashed rgba(245,240,232,0.25);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:22px;background-size:cover;background-position:center;color:rgba(245,240,232,0.45);text-align:center;line-height:1.2;}
+.c-mini-upload.has-img{border-style:solid;border-color:rgba(249,117,69,0.6);}
+.c-topic-input{flex:1;}
 .c-loading-inner{text-align:center;padding:20px;}
 .c-spin-sm{width:28px;height:28px;border:2px solid rgba(249,117,69,0.25);border-top-color:#F97545;border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 6px;}
 .c-err{color:#ff6b6b;font-size:12px;padding:10px;text-align:center;}
 .c-slide-btns{display:flex;gap:8px;}
+.change-area{margin-top:12px;border-top:1px solid rgba(245,240,232,0.1);padding-top:12px;}
+.change-hint{color:rgba(245,240,232,0.45);font-size:12px;margin-bottom:7px;}
+.change-row{display:flex;gap:8px;align-items:flex-start;}
+.change-input{flex:1;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;padding:9px 12px;font-size:13px;resize:vertical;min-height:38px;font-family:inherit;line-height:1.4;}
+.change-input:focus{outline:none;border-color:#F97545;}
+.btn-change{background:rgba(249,117,69,0.15);border:1px solid rgba(249,117,69,0.4);color:#F97545;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;}
+.btn-change:active{background:rgba(249,117,69,0.25);}
+.mem-section{margin-top:10px;border-top:1px solid rgba(245,240,232,0.1);padding-top:10px;}
+.mem-toggle{background:none;border:none;color:rgba(245,240,232,0.5);font-size:12px;cursor:pointer;padding:0;font-family:inherit;display:flex;align-items:center;gap:5px;}
+.mem-toggle:hover{color:#F97545;}
+.mem-list{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.mem-item{display:flex;justify-content:space-between;align-items:center;background:rgba(245,240,232,0.05);border-radius:7px;padding:5px 8px;}
+.mem-txt{font-size:12px;color:rgba(245,240,232,0.6);flex:1;}
+.mem-del{background:none;border:none;color:rgba(245,240,232,0.3);cursor:pointer;font-size:14px;padding:0 0 0 6px;line-height:1;}
+.mem-del:hover{color:#F97545;}
+.mem-empty{font-size:12px;color:rgba(245,240,232,0.3);font-style:italic;}
+.mem-clear{background:none;border:none;color:rgba(245,240,232,0.3);font-size:11px;cursor:pointer;margin-top:4px;font-family:inherit;}
+.mem-clear:hover{color:#F97545;}
+.btn-dl-slide{flex:1;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.2);color:#F5F0E8;border-radius:10px;padding:11px;font-size:13px;cursor:pointer;font-family:inherit;}
+.c-tpl-section{margin-top:8px;padding-top:8px;border-top:1px solid rgba(245,240,232,0.08);}
+.c-tpl-label-sm{font-size:11px;color:rgba(245,240,232,0.4);margin-bottom:6px;}
+.c-tpl-row{display:flex;gap:5px;flex-wrap:wrap;}
+.c-tpl-item{position:relative;width:58px;height:58px;border-radius:8px;border:2px solid rgba(245,240,232,0.12);overflow:hidden;cursor:pointer;flex-shrink:0;transition:border-color 0.15s;}
+.c-tpl-item.active{border-color:#F97545;box-shadow:0 0 0 1px rgba(249,117,69,0.4);}
+.c-tpl-item canvas{width:100%;height:100%;display:block;}
+.c-tpl-name{position:absolute;bottom:0;left:0;right:0;font-size:8px;color:#F5F0E8;background:rgba(0,0,0,0.55);text-align:center;padding:2px 0;letter-spacing:0.5px;}
+.video-preview-wrap{position:relative;width:100%;border-radius:16px;overflow:hidden;background:#000;margin-bottom:12px;}
+.video-preview-wrap video{width:100%;display:block;}
+.video-text-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 16px 14px;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);}
+.video-hl{font-family:'Pally',sans-serif;font-weight:700;font-size:clamp(18px,5vw,28px);color:#fff;display:block;line-height:1.2;margin-bottom:4px;}
+.video-sub{font-family:'Pally',sans-serif;font-size:clamp(13px,3.5vw,18px);color:rgba(255,255,255,0.85);display:block;}
+.btn-export-video{width:100%;background:linear-gradient(135deg,#F97545,#E5603A);color:#fff;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;}
+.video-fmt-row{display:flex;gap:8px;margin-bottom:12px;}
+.video-fmt-btn{flex:1;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.2);color:rgba(245,240,232,0.6);border-radius:10px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;}
+.video-fmt-btn.active{background:rgba(249,117,69,0.15);border-color:#F97545;color:#F97545;font-weight:700;}
+.export-note{font-size:11px;color:rgba(245,240,232,0.35);text-align:center;margin-top:8px;}
+.btn-dl-slide:active{background:rgba(245,240,232,0.15);}
 .btn-gen-slide{flex:1;background:linear-gradient(135deg,#F97545,#E5603A);color:#fff;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn-refresh-slide{flex:1;background:rgba(249,117,69,0.15);border:1px solid rgba(249,117,69,0.4);color:#F97545;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 .c-done-badge{font-size:11px;color:rgba(245,240,232,0.5);text-align:right;}
@@ -142,26 +194,34 @@ textarea{resize:none;}
   <h2><span class="badge">0</span> Claude API Key</h2>
   <div style="display:flex;gap:8px;align-items:center;">
     <input type="password" id="apiKey" placeholder="sk-ant-..." oninput="saveKey()" style="flex:1;">
-    <button onclick="resetKey()" style="background:rgba(245,240,232,0.1);border:1px solid rgba(245,240,232,0.2);color:rgba(245,240,232,0.6);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;white-space:nowrap;" title="Key löschen">× Reset</button>
+    <button type="button" onclick="resetKey()" style="background:rgba(245,240,232,0.1);border:1px solid rgba(245,240,232,0.2);color:rgba(245,240,232,0.6);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;white-space:nowrap;" title="Key löschen">× Reset</button>
   </div>
   <div class="api-status" id="apiStatus">🔑 Key wird lokal gespeichert · <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#F97545;">console.anthropic.com</a></div>
+  <div class="mem-section">
+    <button type="button" class="mem-toggle" onclick="toggleMemView()">🧠 Stilgedächtnis <span id="memCount"></span></button>
+    <div id="memView" style="display:none;">
+      <div class="mem-list" id="styleMemoryList"></div>
+      <button type="button" class="mem-clear" onclick="clearStyleMemory()">Alle löschen</button>
+    </div>
+  </div>
 </div>
 
 <!-- 1 MODUS & FORMAT -->
 <div class="section">
   <h2><span class="badge">1</span> Modus &amp; Format</h2>
   <div class="mode-toggle">
-    <button class="mode-btn active" id="btnSingle" onclick="setMode('single')">◼ Einzelbild</button>
-    <button class="mode-btn" id="btnCarousel" onclick="setMode('carousel')">▦ Carousel</button>
+    <button type="button" class="mode-btn active" id="btnSingle" onclick="setMode('single')">◼ Einzelbild</button>
+    <button type="button" class="mode-btn" id="btnCarousel" onclick="setMode('carousel')">▦ Carousel</button>
+    <button type="button" class="mode-btn" id="btnVideo" onclick="setMode('video')">▶ Video</button>
   </div>
   <div class="row" id="fmtRow">
-    <button class="pill active" data-fmt="square" onclick="setFmt(this)">◼ Feed 3:4</button>
-    <button class="pill" data-fmt="story" onclick="setFmt(this)">▬ Story 9:16</button>
+    <button type="button" class="pill active" data-fmt="square" onclick="setFmt(this)">◼ Feed 3:4</button>
+    <button type="button" class="pill" data-fmt="story" onclick="setFmt(this)">▬ Story 9:16</button>
   </div>
 </div>
 
 <!-- 2 FOTO -->
-<div class="section">
+<div class="section" id="fotoSection">
   <h2><span class="badge">2</span> <span id="fotoTitle">Foto</span></h2>
   <div id="slideTabs" class="slide-tabs" style="display:none;"></div>
   <p id="carouselFotoHint" style="display:none;color:rgba(245,240,232,0.5);font-size:13px;margin:0 0 10px;text-align:center;">📸 Ein Foto für alle Slides – KI textet jede Slide individuell.</p>
@@ -172,9 +232,9 @@ textarea{resize:none;}
     <div class="upload-sub" id="upSub">Kamera · Galerie · Drive</div>
   </div>
   <div class="row">
-    <button class="pill active" data-crop="bottom" onclick="setCrop(this)">⬆ Motiv oben</button>
-    <button class="pill" data-crop="center" onclick="setCrop(this)">◼ Mitte</button>
-    <button class="pill" data-crop="top" onclick="setCrop(this)">⬇ Motiv unten</button>
+    <button type="button" class="pill active" data-crop="bottom" onclick="setCrop(this)">⬆ Motiv oben</button>
+    <button type="button" class="pill" data-crop="center" onclick="setCrop(this)">◼ Mitte</button>
+    <button type="button" class="pill" data-crop="top" onclick="setCrop(this)">⬇ Motiv unten</button>
   </div>
 </div>
 
@@ -184,8 +244,8 @@ textarea{resize:none;}
   <div class="idea-box">
     <textarea id="idea" placeholder="z.B.: Glöcklbräu, jeden Mittwoch gibt es ihr berühmtes gebackenes Cordon Bleu, Stammgäste kommen extra dafür, gemütliches Wirtshaus-Flair..."></textarea>
   </div>
-  <button class="btn-ai" id="btnAI" onclick="analyzeOne()">✨ KI analysieren lassen</button>
-  <button class="btn-sec" id="btnAIAll" style="display:none;" onclick="analyzeAll()">✨ Alle Slides analysieren</button>
+  <button type="button" class="btn-ai" id="btnAI" onclick="analyzeOne()">✨ KI analysieren lassen</button>
+  <button type="button" class="btn-sec" id="btnAIAll" style="display:none;" onclick="analyzeAll()">✨ Alle Slides analysieren</button>
   <div class="loader" id="loader"><span class="spinner">⚙</span> <span id="loaderTxt"> Claude denkt nach…</span></div>
 </div>
 
@@ -199,7 +259,7 @@ textarea{resize:none;}
   </div>
   <div class="variant-count" id="variantCount"></div>
   <div class="variant-grid" id="variantGrid"></div>
-  <button class="btn-refresh" id="btnRefresh" onclick="refreshVariants()">🔄 Andere Designs anzeigen</button>
+  <button type="button" class="btn-refresh" id="btnRefresh" onclick="refreshVariants()">🔄 Andere Designs anzeigen</button>
 
   <!-- Vorlage tauschen (nach Auswahl sichtbar) -->
   <div class="tpl-swap-section" id="tplSwapSection">
@@ -212,7 +272,14 @@ textarea{resize:none;}
     <div class="preview-sep"></div>
     <div class="preview-label">Ausgewähltes Design</div>
     <div class="preview-wrap" id="previewWrap"><canvas id="canvas"></canvas></div>
-    <button class="btn-dl" id="btnDl" onclick="downloadSingle()">⬇ Bild speichern</button>
+    <button type="button" class="btn-dl" id="btnDl" onclick="downloadSingle()">⬇ Bild speichern</button>
+    <div class="change-area" id="singleChangeArea">
+      <div class="change-hint">✏️ Etwas anpassen? KI ändert nur das Gewünschte.</div>
+      <div class="change-row">
+        <textarea class="change-input" id="singleChangeInput" placeholder="z.B. &quot;Headline kürzer&quot; oder &quot;letztes Wort ändern zu XY&quot;"></textarea>
+        <button type="button" class="btn-change" onclick="applyChangeSingle()">✏️ Anpassen</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -233,19 +300,63 @@ textarea{resize:none;}
   <label>Begleittext</label>
   <input type="text" id="body" placeholder="z.B. Dafür merkt man sich den Mittwoch.">
 
-  <button class="btn-render" onclick="renderManual()">▶ Vorschau aktualisieren</button>
+  <button type="button" class="btn-render" onclick="renderManual()">▶ Vorschau aktualisieren</button>
 </div>
 
 <!-- 5 CAROUSEL BUILDER -->
+<!-- VIDEO SECTION -->
+<div class="section" id="videoSection" style="display:none;">
+  <h2><span class="badge">2</span> Video hochladen</h2>
+  <div class="upload-zone" id="videoUploadZone" onclick="document.getElementById('videoFileInput').click()">
+    <input type="file" id="videoFileInput" accept="video/*" style="display:none" onchange="onVideoFile(event)">
+    <div class="upload-icon">🎬</div>
+    <div class="upload-lbl" id="videoUpLbl">Video auswählen</div>
+    <div class="upload-sub">MP4, MOV, WebM</div>
+  </div>
+
+  <div id="videoEditArea" style="display:none;">
+    <h2 style="margin-top:16px;"><span class="badge">3</span> Format &amp; Text</h2>
+    <div class="video-fmt-row">
+      <button type="button" class="video-fmt-btn active" id="vFmtFeed" onclick="setVideoFmt('feed',this)">◼ Feed 3:4</button>
+      <button type="button" class="video-fmt-btn" id="vFmtStory" onclick="setVideoFmt('story',this)">☰ Story 9:16</button>
+    </div>
+    <input type="text" id="videoHeadline" placeholder="Headline (z.B. MITTAGSMENÜ)" oninput="updateVideoPreview()"
+      style="width:100%;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;padding:10px 12px;font-size:15px;font-family:inherit;box-sizing:border-box;margin-bottom:8px;">
+    <input type="text" id="videoSubline" placeholder="Subtext optional (z.B. Täglich ab 11:30 Uhr)" oninput="updateVideoPreview()"
+      style="width:100%;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;padding:10px 12px;font-size:14px;font-family:inherit;box-sizing:border-box;margin-bottom:12px;">
+
+    <div class="video-preview-wrap" id="videoPreviewWrap">
+      <video id="previewVideo" playsinline loop muted style="max-height:400px;"></video>
+      <div class="video-text-overlay" id="videoOverlay">
+        <span class="video-hl" id="videoHlPreview"></span>
+        <span class="video-sub" id="videoSubPreview"></span>
+      </div>
+    </div>
+
+    <button type="button" class="btn-export-video" onclick="exportVideo()">⬇ Video mit Text exportieren</button>
+    <div class="export-note" id="videoExportNote">Export läuft in Echtzeit (= Dauer des Videos)</div>
+  </div>
+</div>
+
 <div class="section" id="carouselDlSection" style="display:none;">
   <h2><span class="badge">3</span> Slides &amp; Texte</h2>
   <p class="c-hint">Für jede Slide ein Thema eingeben – KI erstellt kreative Texte.</p>
   <div id="cSlideList" class="c-slide-list"></div>
   <div class="c-actions">
-    <button class="btn-add-slide" onclick="addCSlide()">+ Slide</button>
-    <button class="btn-gen-all" onclick="genAllCarousel()">✨ Alle generieren</button>
+    <button type="button" class="btn-add-slide" onclick="addCSlide()">+ Slide</button>
+    <button type="button" class="btn-gen-all" onclick="genAllCarousel()">✨ Alle generieren</button>
   </div>
-  <button class="btn-zip" onclick="renderAllZip()">📦 ZIP herunterladen</button>
+  <button type="button" class="btn-zip" onclick="renderAllZip()">📦 Alle Slides als ZIP</button>
+
+  <div class="caption-section">
+    <div class="caption-header">
+      <span class="caption-title">📝 Posting-Text</span>
+      <button type="button" class="btn-caption-refresh" id="btnCaptionRefresh" onclick="genCaption(true)" style="display:none;">🔄</button>
+    </div>
+    <textarea class="caption-textarea" id="captionText" placeholder="Hier erscheint dein generierter Posting-Text – oder schreib ihn direkt selbst…" rows="6"></textarea>
+    <input type="text" class="caption-hint-input" id="captionHint" placeholder="Optional: Ergänzung / Hinweis für die KI (z.B. Ton, Emoji-Stil, Fokus…)">
+    <button type="button" class="btn-gen-caption" id="btnGenCaption" onclick="genCaption(false)">✨ Posting-Text generieren</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -253,9 +364,9 @@ textarea{resize:none;}
 // ── Carousel Slide Builder ──
 const CTPLS = ['E','D1','D2','D3','A','B','VD','VDF'];
 let cSlides = [
-  {topic:'',head1:'',head2:'',body:'',tpl:'E',done:false},
-  {topic:'',head1:'',head2:'',body:'',tpl:'D1',done:false},
-  {topic:'',head1:'',head2:'',body:'',tpl:'D2',done:false}
+  {topic:'',img:null,imgDataUrl:'',head1:'',head2:'',body:'',tpl:'E',done:false},
+  {topic:'',img:null,imgDataUrl:'',head1:'',head2:'',body:'',tpl:'D1',done:false},
+  {topic:'',img:null,imgDataUrl:'',head1:'',head2:'',body:'',tpl:'D2',done:false}
 ];
 
 function renderCarouselGrid(){
@@ -273,44 +384,90 @@ function renderCarouselGrid(){
       <div class="c-slide-header">
         <span class="c-slide-num">Slide ${i+1}</span>
         ${s.done?'<span class="c-done-badge">✅ Generiert</span>':''}
-        <button class="c-del-btn" onclick="delCSlide(${i})" title="Slide löschen">🗑</button>
+        <button type="button" class="c-del-btn" onclick="delCSlide(${i})" title="Slide löschen">🗑</button>
       </div>
-      <textarea class="c-topic-input" id="cTopic_${i}" placeholder="Thema für Slide ${i+1} (z.B. Cordon Bleu, Gemütliche Atmosphäre, Stammgäste…)">${s.topic||''}</textarea>
+      <div class="c-slide-row">
+        <div class="c-mini-upload ${s.img?'has-img':''}" id="cThumb_${i}"
+             onclick="document.getElementById('cFile_${i}').click()"
+             style="${s.imgDataUrl?'background-image:url('+s.imgDataUrl+');font-size:0':''}">
+          ${s.img?'':"📷<br><span style='font-size:10px;line-height:1.4'>Foto</span>"}
+        </div>
+        <input type="file" id="cFile_${i}" accept="image/*" style="display:none" onchange="setCSlideImg(${i},this.files[0])">
+        <textarea class="c-topic-input" id="cTopic_${i}" placeholder="Beschreibung für Slide ${i+1} – KI schreibt den Text dazu…">${s.topic||''}</textarea>
+      </div>
       <div class="c-preview-outer" id="cPreview_${i}">${previewHtml}</div>
       <div class="c-slide-btns">
-        <button class="btn-gen-slide" onclick="genCSlide(${i})">${s.done?'🔄 Refresh':'✨ Generieren'}</button>
+        <button type="button" class="btn-gen-slide" onclick="genCSlide(${i})">${s.done?'🔄 Refresh':'✨ Generieren'}</button>
+        ${s.done?`<button type="button" class="btn-dl-slide" onclick="downloadCSlide(${i})">⬇ Slide ${i+1}</button>`:''}
       </div>
+      ${s.done?`
+      <div class="c-tpl-section">
+        <div class="c-tpl-label-sm">STIL WÄHLEN</div>
+        <div class="c-tpl-row" id="cTplRow_${i}"></div>
+      </div>
+      <div class="change-area">
+        <div class="change-hint">✏️ Etwas anpassen? KI ändert nur das Gewünschte.</div>
+        <div class="change-row">
+          <textarea class="change-input" id="cChange_${i}" placeholder="z.B. &quot;zweite Zeile kürzer&quot; oder &quot;Wort X zu Y&quot;"></textarea>
+          <button type="button" class="btn-change" onclick="applyChangeCSlide(${i})">✏️</button>
+        </div>
+      </div>`:''}
     `;
     list.appendChild(card);
     const ta=document.getElementById('cTopic_'+i);
     if(ta)ta.addEventListener('input',e=>{cSlides[i].topic=e.target.value;});
-    if(s.done){requestAnimationFrame(()=>drawCSlide(i));}
+    if(s.done){requestAnimationFrame(()=>{drawCSlide(i);renderCSlideTemplates(i);});}
   });
 }
 
 function drawCSlide(i){
   const s=cSlides[i];
   if(!s.done)return;
+  const slideImg=s.img;
+  if(!slideImg)return;
   const canvas=document.getElementById('cCanvas_'+i);
   if(!canvas)return;
   canvas.width=1080;canvas.height=1080;
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,1080,1080);
-  drawSlide({...s,img:img},ctx,1080,1080,s.tpl||tpl);
+  drawSlide({...s,img:slideImg},ctx,1080,1080,s.tpl||tpl);
+}
+
+function setCSlideImg(i,file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const image=new Image();
+    image.onload=()=>{
+      cSlides[i].img=image;
+      cSlides[i].imgDataUrl=e.target.result;
+      const thumb=document.getElementById('cThumb_'+i);
+      if(thumb){
+        thumb.style.backgroundImage='url('+e.target.result+')';
+        thumb.style.fontSize='0';
+        thumb.innerHTML='';
+        thumb.classList.add('has-img');
+      }
+      if(cSlides[i].done)requestAnimationFrame(()=>drawCSlide(i));
+    };
+    image.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 async function genCSlide(i){
   const topic=(cSlides[i].topic||'').trim();
-  if(!topic){alert('Bitte ein Thema für Slide '+(i+1)+' eingeben.');return;}
+  if(!topic){alert('Bitte eine Beschreibung für Slide '+(i+1)+' eingeben.');return;}
+  if(!cSlides[i].img){alert('Bitte zuerst ein Foto für Slide '+(i+1)+' hochladen (kleines 📷-Feld links).');return;}
   const apiKey=(document.getElementById('apiKey').value||'').trim();
   if(!apiKey){alert('Bitte Claude API Key eingeben.');return;}
   const preview=document.getElementById('cPreview_'+i);
   if(preview)preview.innerHTML='<div class="c-loading-inner"><div class="c-spin-sm"></div><div style="color:rgba(245,240,232,0.6);font-size:13px">KI generiert…</div></div>';
-  const prompt=`Erstelle für einen Instagram-Mittagstipp-Post (Mittags-Geheimtipps Graz) auf Deutsch prägnante Texte.
+  const memCtx=getStyleMemoryContext();  const prompt=`Erstelle für einen Instagram-Mittagstipp-Post (Mittags-Geheimtipps Graz) auf Deutsch prägnante Texte.
 Thema/Stichwort für diese Slide: "${topic}"
 Slide: ${i+1} von ${cSlides.length}
 
-Regeln: head1 in GROSSBUCHSTABEN, max 18 Zeichen. head2 mixed case, max 22 Zeichen. body österreichisch-casual, max 55 Zeichen. Keine Emojis im Text.
+Regeln: head1 in GROSSBUCHSTABEN, max 18 Zeichen. head2 mixed case, max 22 Zeichen. body österreichisch-casual, max 55 Zeichen. Keine Emojis im Text.\${memCtx}
 
 Antworte NUR mit einem gültigen JSON-Objekt:
 {"head1":"...","head2":"...","body":"..."}`;
@@ -327,7 +484,7 @@ Antworte NUR mit einem gültigen JSON-Objekt:
     cSlides[i]={...cSlides[i],head1:json.head1||'',head2:json.head2||'',body:json.body||'',tpl:CTPLS[i%CTPLS.length],done:true};
     // Re-render card to show preview
     renderCarouselGrid();
-    requestAnimationFrame(()=>drawCSlide(i));
+    requestAnimationFrame(()=>{drawCSlide(i);renderCSlideTemplates(i);});
     // Scroll to card
     const card=document.getElementById('cCard_'+i);
     if(card)card.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -343,7 +500,7 @@ async function genAllCarousel(){
 
 function addCSlide(){
   if(cSlides.length>=8){alert('Maximal 8 Slides.');return;}
-  cSlides.push({topic:'',head1:'',head2:'',body:'',tpl:CTPLS[cSlides.length%CTPLS.length],done:false});
+  cSlides.push({topic:'',img:null,imgDataUrl:'',head1:'',head2:'',body:'',tpl:CTPLS[cSlides.length%CTPLS.length],done:false});
   renderCarouselGrid();
   // scroll to new slide
   setTimeout(()=>{
@@ -356,6 +513,134 @@ function delCSlide(i){
   if(cSlides.length<=1){alert('Mindestens 1 Slide.');return;}
   cSlides.splice(i,1);
   renderCarouselGrid();
+}
+
+function renderCSlideTemplates(i){
+  const container=document.getElementById('cTplRow_'+i);
+  if(!container)return;
+  const s=cSlides[i];
+  if(!s.done||!s.img)return;
+  container.innerHTML='';
+  CTPLS.forEach(tplName=>{
+    const item=document.createElement('div');
+    item.className='c-tpl-item'+(s.tpl===tplName?' active':'');
+    item.title=tplName;
+    item.onclick=()=>{
+      cSlides[i].tpl=tplName;
+      container.querySelectorAll('.c-tpl-item').forEach((el,j)=>el.classList.toggle('active',CTPLS[j]===tplName));
+      requestAnimationFrame(()=>drawCSlide(i));
+    };
+    const canvas=document.createElement('canvas');
+    canvas.width=200;canvas.height=200;
+    const ctx=canvas.getContext('2d');
+    drawSlide({...s,img:s.img},ctx,200,200,tplName);
+    const lbl=document.createElement('div');
+    lbl.className='c-tpl-name';lbl.textContent=tplName;
+    item.appendChild(canvas);item.appendChild(lbl);
+    container.appendChild(item);
+  });
+}
+
+function downloadCSlide(i){
+  const s=cSlides[i];
+  if(!s.done||!s.img){alert('Slide noch nicht generiert.');return;}
+  const CW=1080,CH=1080;
+  const oc=document.createElement('canvas');oc.width=CW;oc.height=CH;
+  const octx=oc.getContext('2d');
+  drawSlide({...s,img:s.img},octx,CW,CH,s.tpl||tpl);
+  oc.toBlob(blob=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='slide_'+(i+1)+'.jpg';
+    a.click();
+  },'image/jpeg',0.93);
+}
+
+async function applyChangeSingle(){
+  const changeText=(document.getElementById('singleChangeInput').value||'').trim();
+  if(!changeText){alert('Bitte einen Änderungswunsch eingeben.');return;}
+  const s=slides[cur];
+  if(!s.head1&&!s.head2&&!s.body){alert('Bitte zuerst einen Post generieren.');return;}
+  const apiKey=(document.getElementById('apiKey').value||'').trim();
+  if(!apiKey){alert('Bitte API Key eingeben.');return;}
+  const btn=document.querySelector('#singleChangeArea .btn-change');
+  if(btn){btn.textContent='…';btn.disabled=true;}
+  const prompt=`Du hast diesen Instagram-Post generiert:
+head1: "${s.head1}"
+head2: "${s.head2}"
+body: "${s.body}"
+
+Änderungswunsch: "${changeText}"
+
+Passe den Post entsprechend an. Behalte alles was nicht geändert werden soll unverändert.
+Zeichenlimits: head1 GROSSBUCHSTABEN max 18 Zeichen, head2 max 22 Zeichen, body österreichisch-casual max 55 Zeichen.
+Antworte NUR mit JSON: {"head1":"...","head2":"...","body":"..."}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    if(data.error){const m=data.error.message||'';if(m.includes('api_key')||data.error.type==='authentication_error')throw new Error('Ungültiger API Key → Reset klicken');throw new Error(m);}
+    const raw=data.content[0].text.trim();
+    const json=JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+    slides[cur].head1=json.head1||s.head1;
+    slides[cur].head2=json.head2||s.head2;
+    slides[cur].body=json.body||s.body;
+    document.getElementById('head1').value=slides[cur].head1;
+    document.getElementById('head2').value=slides[cur].head2;
+    document.getElementById('body').value=slides[cur].body;
+    renderPreview();
+    saveToStyleMemory(changeText);
+    document.getElementById('singleChangeInput').value='';
+    if(btn){btn.textContent='✏️ Anpassen';btn.disabled=false;}
+  }catch(e){
+    if(btn){btn.textContent='✏️ Anpassen';btn.disabled=false;}
+    alert('Fehler: '+e.message);
+  }
+}
+
+async function applyChangeCSlide(i){
+  const changeInput=document.getElementById('cChange_'+i);
+  const changeText=(changeInput?.value||'').trim();
+  if(!changeText){alert('Bitte einen Änderungswunsch eingeben.');return;}
+  const s=cSlides[i];
+  const apiKey=(document.getElementById('apiKey').value||'').trim();
+  if(!apiKey){alert('Bitte API Key eingeben.');return;}
+  const btn=document.querySelector('#cCard_'+i+' .btn-change');
+  if(btn){btn.textContent='…';btn.disabled=true;}
+  const prompt=`Du hast diesen Instagram-Slide generiert:
+head1: "${s.head1}"
+head2: "${s.head2}"
+body: "${s.body}"
+
+Änderungswunsch: "${changeText}"
+
+Passe den Slide entsprechend an. Behalte alles was nicht geändert werden soll.
+Zeichenlimits: head1 GROSSBUCHSTABEN max 18 Zeichen, head2 max 22 Zeichen, body österreichisch-casual max 55 Zeichen.
+Antworte NUR mit JSON: {"head1":"...","head2":"...","body":"..."}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    if(data.error){const m=data.error.message||'';if(m.includes('api_key')||data.error.type==='authentication_error')throw new Error('Ungültiger API Key → Reset klicken');throw new Error(m);}
+    const raw=data.content[0].text.trim();
+    const json=JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+    cSlides[i].head1=json.head1||s.head1;
+    cSlides[i].head2=json.head2||s.head2;
+    cSlides[i].body=json.body||s.body;
+    saveToStyleMemory(changeText);
+    if(changeInput)changeInput.value='';
+    if(btn){btn.textContent='✏️';btn.disabled=false;}
+    requestAnimationFrame(()=>drawCSlide(i));
+  }catch(e){
+    if(btn){btn.textContent='✏️';btn.disabled=false;}
+    alert('Fehler: '+e.message);
+  }
 }
 </script>
 <script>
@@ -374,28 +659,158 @@ const ALL_TPLS=['E','A','VDF','D3','D1','VD','D2','B'];
 let usedTpls=new Set();
 
 // ── API Key ──
+// ── Stilgedächtnis ──
+function getStyleMemory(){return JSON.parse(localStorage.getItem('mgk_style_mem')||'[]');}
+function saveToStyleMemory(txt){
+  if(!txt||txt.length<3)return;
+  const mem=getStyleMemory();
+  if(!mem.includes(txt)){mem.unshift(txt);if(mem.length>20)mem.pop();localStorage.setItem('mgk_style_mem',JSON.stringify(mem));}
+  updateStyleMemoryUI();
+}
+function deleteStyleMemory(i){const mem=getStyleMemory();mem.splice(i,1);localStorage.setItem('mgk_style_mem',JSON.stringify(mem));updateStyleMemoryUI();}
+function clearStyleMemory(){localStorage.removeItem('mgk_style_mem');updateStyleMemoryUI();}
+function toggleMemView(){const v=document.getElementById('memView');v.style.display=v.style.display==='none'?'block':'none';}
+function updateStyleMemoryUI(){
+  const mem=getStyleMemory();
+  const el=document.getElementById('styleMemoryList');
+  const cnt=document.getElementById('memCount');
+  if(cnt)cnt.textContent=mem.length>0?'('+mem.length+')':'';
+  if(!el)return;
+  if(mem.length===0){el.innerHTML='<span class="mem-empty">Noch keine Korrekturen gespeichert.</span>';return;}
+  el.innerHTML=mem.map((m,i)=>`<div class="mem-item"><span class="mem-txt">${m}</span><button type="button" class="mem-del" onclick="deleteStyleMemory(${i})">×</button></div>`).join('');
+}
+function getStyleMemoryContext(){
+  const mem=getStyleMemory().slice(0,10);
+  if(mem.length===0)return'';
+  return'\n\nGelernte Stil-Präferenzen (aus früheren Korrekturen des Users – bitte automatisch berücksichtigen):\n'+mem.map(m=>'- '+m).join('\n');
+}
+
 window.addEventListener('load',()=>{
   const k=localStorage.getItem('mgk_k');
   if(k){document.getElementById('apiKey').value=k;document.getElementById('apiStatus').textContent='✅ Key gespeichert · console.anthropic.com';}
+  updateStyleMemoryUI();
 });
+// ── Video Mode ──
+let videoFmt='feed', videoBlobURL=null;
+function onVideoFile(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(videoBlobURL)URL.revokeObjectURL(videoBlobURL);
+  videoBlobURL=URL.createObjectURL(file);
+  const vid=document.getElementById('previewVideo');
+  vid.src=videoBlobURL;vid.load();
+  document.getElementById('videoUpLbl').textContent='✓ '+file.name;
+  document.getElementById('videoUploadZone').style.borderColor='#F97545';
+  document.getElementById('videoEditArea').style.display='block';
+  updateVideoPreview();
+}
+function setVideoFmt(fmt,btn){
+  videoFmt=fmt;
+  document.querySelectorAll('.video-fmt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function updateVideoPreview(){
+  document.getElementById('videoHlPreview').textContent=document.getElementById('videoHeadline').value;
+  document.getElementById('videoSubPreview').textContent=document.getElementById('videoSubline').value;
+}
+async function exportVideo(){
+  if(!videoBlobURL){alert('Bitte zuerst ein Video hochladen.');return;}
+  const headline=(document.getElementById('videoHeadline').value||'').trim();
+  const subline=(document.getElementById('videoSubline').value||'').trim();
+  const isStory=videoFmt==='story';
+  const CW=1080,CH=isStory?1920:1440;
+  const note=document.getElementById('videoExportNote');
+  const btn=document.querySelector('.btn-export-video');
+  btn.disabled=true;btn.textContent='⏳ Exportiere…';
+  if(note)note.textContent='Export läuft – bitte warten (Echtzeit-Rendering)…';
+
+  const canvas=document.createElement('canvas');
+  canvas.width=CW;canvas.height=CH;
+  const ctx=canvas.getContext('2d');
+
+  const vid=document.createElement('video');
+  vid.src=videoBlobURL;vid.muted=true;vid.playsInline=true;
+  vid.crossOrigin='anonymous';
+
+  const mimeMP4='video/mp4;codecs=avc1';
+  const mimeType=MediaRecorder.isTypeSupported(mimeMP4)?'video/mp4':
+                 MediaRecorder.isTypeSupported('video/mp4')?'video/mp4':'video/webm';
+  const ext=mimeType.includes('mp4')?'mp4':'webm';
+
+  const stream=canvas.captureStream(30);
+  const recorder=new MediaRecorder(stream,{mimeType:mimeType.split(';')[0],videoBitsPerSecond:8000000});
+  const chunks=[];
+  recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+  recorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:mimeType.split(';')[0]});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='mittags_video.'+ext;
+    a.click();
+    btn.disabled=false;btn.textContent='⬇ Video mit Text exportieren';
+    if(note)note.textContent='✅ Export fertig! Format: '+ext.toUpperCase();
+  };
+
+  await new Promise(r=>{vid.onloadedmetadata=r;vid.load();});
+  vid.currentTime=0;
+  await new Promise(r=>{vid.onseeked=r;});
+
+  recorder.start(100);
+  vid.play();
+
+  function drawFrame(){
+    if(vid.ended||vid.paused){recorder.stop();return;}
+    // Cover-fit video onto canvas
+    const vAr=vid.videoWidth/vid.videoHeight,cAr=CW/CH;
+    let sx=0,sy=0,sw=vid.videoWidth,sh=vid.videoHeight;
+    if(vAr>cAr){sw=sh*cAr;sx=(vid.videoWidth-sw)/2;}
+    else{sh=sw/cAr;sy=(vid.videoHeight-sh)/2;}
+    ctx.drawImage(vid,sx,sy,sw,sh,0,0,CW,CH);
+
+    if(headline){
+      // Gradient
+      const gH=CH*0.4;
+      const g=ctx.createLinearGradient(0,CH-gH,0,CH);
+      g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0.82)');
+      ctx.fillStyle=g;ctx.fillRect(0,CH-gH,CW,gH);
+      // Headline
+      const fs=Math.round(CW*0.075);
+      ctx.font='bold '+fs+'px Pally,sans-serif';
+      ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+      ctx.fillText(headline,CW/2,CH-Math.round(CH*(subline?0.1:0.07)));
+      // Subline
+      if(subline){
+        ctx.font=Math.round(CW*0.048)+'px Pally,sans-serif';
+        ctx.fillStyle='rgba(255,255,255,0.85)';
+        ctx.fillText(subline,CW/2,CH-Math.round(CH*0.05));
+      }
+    }
+    requestAnimationFrame(drawFrame);
+  }
+  requestAnimationFrame(drawFrame);
+}
+
 function resetKey(){localStorage.removeItem('mgk_k');document.getElementById('apiKey').value='';document.getElementById('apiStatus').textContent='🔑 Key gelöscht – bitte neu eingeben';}
 function saveKey(){const k=document.getElementById('apiKey').value.trim();if(k){localStorage.setItem('mgk_k',k);document.getElementById('apiStatus').textContent='✅ Key gespeichert';}}
 
 // ── Mode ──
 function setMode(m){
-  saveCur();carousel=m==='carousel';
-  document.getElementById('btnSingle').classList.toggle('active',!carousel);
+  saveCur();
+  carousel=m==='carousel';
+  const isVideo=m==='video';
+  document.getElementById('btnSingle').classList.toggle('active',m==='single');
   document.getElementById('btnCarousel').classList.toggle('active',carousel);
+  document.getElementById('btnVideo').classList.toggle('active',isVideo);
   // In carousel mode: hide idea section, format pills, slide tabs, variant section
   // Show carousel builder section
   document.getElementById('fmtRow').style.display=carousel?'none':'flex';
   document.getElementById('ideaSection').style.display=carousel?'none':'block';
   document.getElementById('variantSection').style.display='none';
   document.getElementById('slideTabs').style.display='none';
-  document.getElementById('fotoTitle').textContent=carousel?'Foto hochladen':'Foto';
+  document.getElementById('fotoSection').style.display=(carousel||isVideo)?'none':'block';
+  document.getElementById('videoSection').style.display=isVideo?'block':'none';
   document.getElementById('btnAIAll').style.display='none';
   document.getElementById('carouselDlSection').style.display=carousel?'block':'none';
-  document.getElementById('carouselFotoHint').style.display=carousel?'block':'none';
   if(carousel){renderCarouselGrid();}
   else{renderTabs();loadSlide(cur);}
 }
@@ -478,7 +893,7 @@ function loader(on,txt){document.getElementById('loader').classList.toggle('on',
 async function apiFetch(idea,multi){
   const k=document.getElementById('apiKey').value.trim();
   if(!k)throw new Error('Bitte API Key eingeben (Schritt 0).');
-  const sys=SYSTEM_PROMPT+(multi?'\n\nERSTELLE 3 VERSCHIEDENE VARIANTEN mit verschiedenen Winkeln. Antworte als JSON-Array:\n'+MULTI_SUFFIX:'\n'+SINGLE_SUFFIX);
+  const memCtx=getStyleMemoryContext();const sys=SYSTEM_PROMPT+memCtx+(multi?'\n\nERSTELLE 3 VERSCHIEDENE VARIANTEN mit verschiedenen Winkeln. Antworte als JSON-Array:\n'+MULTI_SUFFIX:'\n'+SINGLE_SUFFIX);
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:multi?1200:512,system:sys,messages:[{role:'user',content:(multi?'3 Varianten':'Post') +' fuer:\n\n'+idea}]})});
   const d=await r.json();
   if(!r.ok){const em=d.error?.message||'API Fehler '+r.status;if(r.status===401||em.includes('api_key'))throw new Error('Ungültiger API Key → oben auf "× Reset" klicken und neuen Key von console.anthropic.com eingeben');throw new Error(em);}
@@ -880,6 +1295,67 @@ function renderManual(){
 // Downloads
 function downloadSingle(){document.getElementById('canvas').toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mittagstipp_slide'+(cur+1)+'.jpg';a.click();},'image/jpeg',0.93);}
 
+async function genCaption(isRefresh){
+  const btn=document.getElementById('btnGenCaption');
+  const refreshBtn=document.getElementById('btnCaptionRefresh');
+  const ta=document.getElementById('captionText');
+  const hint=(document.getElementById('captionHint').value||'').trim();
+
+  // Collect all slide content
+  const slideInfos=cSlides.map((s,i)=>{
+    const parts=[];
+    if(s.topic) parts.push('Thema: '+s.topic);
+    if(s.head1) parts.push('Headline: '+s.head1);
+    if(s.head2) parts.push('Subline: '+s.head2);
+    if(s.body) parts.push('Text: '+s.body);
+    return parts.length?'Slide '+(i+1)+':\n'+parts.join('\n'):'';
+  }).filter(Boolean).join('\n\n');
+
+  if(!slideInfos){
+    alert('Bitte zuerst Slides generieren!');
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='⏳ Generiere…';
+  ta.value='';
+
+  const systemPrompt=`Du bist Social-Media-Texter für den Instagram-Account "Mittags-Geheimtipps Graz" – ein Community-Account der die besten Mittagessen in Graz zeigt. Schreibe einen authentischen, sympathischen und leicht österreichisch-casual Instagram-Posting-Text für ein Karussell-Post. Stil: warm, persönlich, nicht zu werberisch, max. 3-4 kurze Absätze inkl. Hashtags am Ende. Nutze passende Emojis, aber sparsam.`;
+
+  const userPrompt=`Hier sind die Inhalte der Karussell-Slides:
+
+${slideInfos}${hint?'\n\nZusätzliche Hinweise: '+hint:''}\n\nSchreibe jetzt den Posting-Text.${isRefresh?'\n(Neue Version – bitte anders formulieren als ein möglicher vorheriger Entwurf.)':''}`;
+
+  try{
+    const k=localStorage.getItem('mgk_k');
+    if(!k){alert('Kein API Key gespeichert!');return;}
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'x-api-key':k,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+        'content-type':'application/json'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5',
+        max_tokens:800,
+        system:systemPrompt,
+        messages:[{role:'user',content:userPrompt}]
+      })
+    });
+    const data=await resp.json();
+    if(data.error) throw new Error(data.error.message);
+    ta.value=data.content[0].text.trim();
+    refreshBtn.style.display='inline-block';
+  }catch(e){
+    alert('Fehler: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='✨ Posting-Text generieren';
+  }
+}
+
 async function renderAllZip(){
   if(typeof JSZip==='undefined'){alert('JSZip nicht geladen – Internetverbindung prüfen.');return;}
   if(carousel){
@@ -890,7 +1366,9 @@ async function renderAllZip(){
     for(let i=0;i<cSlides.length;i++){
       if(!cSlides[i].done)continue;
       octx.clearRect(0,0,CW,CH);
-      const sd={...cSlides[i],img:img};
+      const slideImg=cSlides[i].img;
+      if(!slideImg)continue;
+      const sd={...cSlides[i],img:slideImg};
       if(drawSlide(sd,octx,CW,CH,cSlides[i].tpl||tpl)){
         const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));
         zip.file('slide_'+(i+1)+'.jpg',blob);count++;
