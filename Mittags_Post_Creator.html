@@ -608,6 +608,34 @@ function renderCSlideTemplates(i){
   });
 }
 
+// ── Speichern: auf Mobil via Teilen-Menü (→ "Bild/Video sichern" → Fotos), sonst Download ──
+async function _saveBlob(blob,filename){
+  try{
+    const file=new File([blob],filename,{type:blob.type||'image/jpeg'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file]});return;}
+      catch(e){if(e&&e.name==='AbortError')return; /* sonst: Fallback Download */}
+    }
+  }catch(e){/* File/Share nicht verfügbar → Fallback */}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+async function _saveImages(files,zipName){
+  // Mehrere Bilder: auf Mobil alle gemeinsam ins Teilen-Menü (→ alle in Fotos), sonst ZIP-Download
+  try{
+    if(navigator.canShare&&navigator.canShare({files})){
+      try{await navigator.share({files});return true;}
+      catch(e){if(e&&e.name==='AbortError')return true;}
+    }
+  }catch(e){}
+  if(typeof JSZip==='undefined')return false;
+  const zip=new JSZip();
+  for(const f of files)zip.file(f.name,f);
+  const content=await zip.generateAsync({type:'blob'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download=zipName||'bilder.zip';a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  return true;
+}
 function downloadCSlide(i){
   const s=cSlides[i];
   if(!s.done||!s.img){alert('Slide noch nicht generiert.');return;}
@@ -615,12 +643,7 @@ function downloadCSlide(i){
   const oc=document.createElement('canvas');oc.width=CW;oc.height=CH;
   const octx=oc.getContext('2d');
   drawSlide({...s,img:s.img},octx,CW,CH,s.tpl||tpl);
-  oc.toBlob(blob=>{
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download='slide_'+(i+1)+'.jpg';
-    a.click();
-  },'image/jpeg',0.93);
+  oc.toBlob(blob=>{_saveBlob(blob,'slide_'+(i+1)+'.jpg');},'image/jpeg',0.93);
 }
 
 async function applyChangeSingle(){
@@ -837,12 +860,9 @@ async function exportVideo(){
   recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
   recorder.onstop=()=>{
     const blob=new Blob(chunks,{type:mimeType.split(';')[0]});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download='mittags_video.'+ext;
-    a.click();
+    _saveBlob(blob,'mittags_video.'+ext);
     btn.disabled=false;btn.textContent='⬇ Video mit Text exportieren';
-    if(note)note.textContent='✅ Export fertig! Format: '+ext.toUpperCase();
+    if(note)note.textContent='✅ Export fertig! Format: '+ext.toUpperCase()+' – am Handy „Video sichern" wählen.';
   };
 
   await new Promise(r=>{vid.onloadedmetadata=r;vid.load();});
@@ -1488,7 +1508,7 @@ function _bindDrag(canvas,getS,getDims,redraw){
 }
 
 // Downloads
-function downloadSingle(){document.getElementById('canvas').toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mittagstipp_slide'+(cur+1)+'.jpg';a.click();},'image/jpeg',0.93);}
+function downloadSingle(){document.getElementById('canvas').toBlob(blob=>{_saveBlob(blob,'mittagstipp_slide'+(cur+1)+'.jpg');},'image/jpeg',0.93);}
 
 async function genCaption(isRefresh){
   const btn=document.getElementById('btnGenCaption');
@@ -1612,8 +1632,8 @@ async function renderAllZip(){
   if(carousel){
     // Carousel mode: use cSlides
     const CW=1080,CH=1080;
-    const zip=new JSZip(),oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
-    loader(true,'Slides rendern…');let count=0;
+    const oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
+    loader(true,'Slides rendern…');const files=[];
     for(let i=0;i<cSlides.length;i++){
       if(!cSlides[i].done)continue;
       octx.clearRect(0,0,CW,CH);
@@ -1622,21 +1642,21 @@ async function renderAllZip(){
       const sd={...cSlides[i],img:slideImg};
       if(drawSlide(sd,octx,CW,CH,cSlides[i].tpl||tpl)){
         const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));
-        zip.file('slide_'+(i+1)+'.jpg',blob);count++;
+        files.push(new File([blob],'slide_'+(i+1)+'.jpg',{type:'image/jpeg'}));
       }
     }
-    if(!count){loader(false);alert('Bitte zuerst mindestens eine Slide generieren.');return;}
-    const content=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download='mittags_carousel.zip';a.click();
+    if(!files.length){loader(false);alert('Bitte zuerst mindestens eine Slide generieren.');return;}
+    await _saveImages(files,'mittags_carousel.zip');
     loader(false);
   } else {
-    // Single mode: render current slide
+    // Single mode: alle Slides mit Foto
     saveCur();
     const isStory=fmt==='story',CW=1080,CH=isStory?1920:1440;
-    const zip=new JSZip(),oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
-    loader(true,'Slide rendern…');let count=0;
-    for(let i=0;i<slides.length;i++){octx.clearRect(0,0,CW,CH);if(drawSlide(slides[i],octx,CW,CH,tpl)){const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));zip.file('slide_'+(i+1)+'.jpg',blob);count++;}}
-    if(!count){loader(false);alert('Keine Slides mit Foto vorhanden.');return;}
-    const content=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(content);a.download='mittags_carousel.zip';a.click();
+    const oc=document.createElement('canvas');oc.width=CW;oc.height=CH;const octx=oc.getContext('2d');
+    loader(true,'Slide rendern…');const files=[];
+    for(let i=0;i<slides.length;i++){octx.clearRect(0,0,CW,CH);if(drawSlide(slides[i],octx,CW,CH,tpl)){const blob=await new Promise(r=>oc.toBlob(r,'image/jpeg',0.93));files.push(new File([blob],'slide_'+(i+1)+'.jpg',{type:'image/jpeg'}));}}
+    if(!files.length){loader(false);alert('Keine Slides mit Foto vorhanden.');return;}
+    await _saveImages(files,'mittags_carousel.zip');
     loader(false);
   }
 }
