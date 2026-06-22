@@ -63,6 +63,10 @@ textarea{resize:none;}
 .caption-hint-input{width:100%;background:rgba(0,0,0,0.2);border:1.5px solid rgba(245,240,232,0.12);border-radius:8px;color:#F5F0E8;font-family:'Pally',sans-serif;font-size:13px;padding:8px 11px;margin-top:8px;outline:none;box-sizing:border-box;}
 .caption-hint-input:focus{border-color:#F97545;}
 .btn-gen-caption{width:100%;background:linear-gradient(135deg,rgba(249,117,69,0.15),rgba(249,117,69,0.05));color:#F97545;border:1.5px solid rgba(249,117,69,0.5);border-radius:13px;padding:13px;font-family:'Pally',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.caption-block{margin-top:14px;padding-top:14px;border-top:1px solid rgba(245,240,232,0.12);}
+.caption-label{font-family:'Pally',sans-serif;font-weight:700;color:#F5F0E8;font-size:14px;margin-bottom:8px;}
+.caption-search{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(245,240,232,0.7);margin-top:8px;cursor:pointer;}
+.caption-search input{width:16px;height:16px;}
 .btn-gen-caption:disabled{opacity:0.4;cursor:default;}
 /* ── VARIANT GRID ── */
 .variant-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;display:none;}
@@ -78,7 +82,16 @@ textarea{resize:none;}
 .preview-label{font-size:10px;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
 .preview-wrap{width:100%;aspect-ratio:1/1;background:#111;border-radius:12px;overflow:hidden;display:none;}
 .preview-wrap.story{aspect-ratio:9/16;}
-#canvas{width:100%;height:100%;display:block;}
+#canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none;}
+#canvas:active{cursor:grabbing;}
+.pos-hint{font-size:12px;color:rgba(245,240,232,0.5);text-align:center;margin:8px 0 6px;}
+.pos-controls{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px;}
+.pos-btn{flex:1 1 auto;min-width:78px;background:rgba(245,240,232,0.08);color:#F5F0E8;border:1px solid rgba(245,240,232,0.18);border-radius:10px;padding:9px 8px;font-family:'Pally',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.pos-btn:active{background:rgba(249,117,69,0.25);}
+.pos-btn-swap{flex-basis:100%;background:rgba(249,117,69,0.16);border-color:rgba(249,117,69,0.45);color:#F97545;}
+.c-pos-controls{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:6px 0;}
+.c-pos-btn{background:rgba(245,240,232,0.08);color:#F5F0E8;border:1px solid rgba(245,240,232,0.18);border-radius:8px;padding:7px 9px;font-family:'Pally',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.c-canvas{touch-action:none;cursor:grab;}
 /* Loader */
 .loader{display:none;text-align:center;padding:14px;font-size:13px;opacity:0.7;}
 .loader.on{display:block;}
@@ -164,6 +177,9 @@ textarea{resize:none;}
 .c-tpl-name{position:absolute;bottom:0;left:0;right:0;font-size:8px;color:#F5F0E8;background:rgba(0,0,0,0.55);text-align:center;padding:2px 0;letter-spacing:0.5px;}
 .video-preview-wrap{position:relative;width:100%;border-radius:16px;overflow:hidden;background:#000;margin-bottom:12px;}
 .video-preview-wrap video{width:100%;display:block;}
+.video-preview-wrap.pos{max-height:460px;}
+.video-preview-wrap.pos video{width:100%;height:100%;object-fit:cover;display:block;cursor:grab;touch-action:none;}
+.video-preview-wrap.pos video:active{cursor:grabbing;}
 .video-text-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 16px 14px;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);}
 .video-hl{font-family:'Pally',sans-serif;font-weight:700;font-size:clamp(18px,5vw,28px);color:#fff;display:block;line-height:1.2;margin-bottom:4px;}
 .video-sub{font-family:'Pally',sans-serif;font-size:clamp(13px,3.5vw,18px);color:rgba(255,255,255,0.85);display:block;}
@@ -218,6 +234,9 @@ textarea{resize:none;}
     <button type="button" class="pill active" data-fmt="square" onclick="setFmt(this)">◼ Feed 3:4</button>
     <button type="button" class="pill" data-fmt="story" onclick="setFmt(this)">▬ Story 9:16</button>
   </div>
+  <label style="display:block;margin-top:12px;font-size:13px;color:rgba(245,240,232,0.7);">🏠 Restaurant (optional – hilft der KI beim Posting-Text)</label>
+  <input type="text" id="restaurantInput" placeholder="z.B. Glöcklbräu, Graz Sackstraße"
+    style="width:100%;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;padding:10px 12px;font-size:14px;font-family:inherit;box-sizing:border-box;margin-top:6px;">
 </div>
 
 <!-- 2 FOTO -->
@@ -231,11 +250,7 @@ textarea{resize:none;}
     <div class="upload-lbl" id="upLbl">Foto auswählen</div>
     <div class="upload-sub" id="upSub">Kamera · Galerie · Drive</div>
   </div>
-  <div class="row">
-    <button type="button" class="pill active" data-crop="bottom" onclick="setCrop(this)">⬆ Motiv oben</button>
-    <button type="button" class="pill" data-crop="center" onclick="setCrop(this)">◼ Mitte</button>
-    <button type="button" class="pill" data-crop="top" onclick="setCrop(this)">⬇ Motiv unten</button>
-  </div>
+  <div class="crop-note" style="font-size:12px;color:rgba(245,240,232,0.5);text-align:center;margin-top:8px;">Position &amp; Zoom stellst du direkt in der Vorschau ein (ziehen / Zoom / Auto-Fokus).</div>
 </div>
 
 <!-- 3 IDEE & KI -->
@@ -244,8 +259,8 @@ textarea{resize:none;}
   <div class="idea-box">
     <textarea id="idea" placeholder="z.B.: Glöcklbräu, jeden Mittwoch gibt es ihr berühmtes gebackenes Cordon Bleu, Stammgäste kommen extra dafür, gemütliches Wirtshaus-Flair..."></textarea>
   </div>
-  <button type="button" class="btn-ai" id="btnAI" onclick="analyzeOne()">✨ KI analysieren lassen</button>
-  <button type="button" class="btn-sec" id="btnAIAll" style="display:none;" onclick="analyzeAll()">✨ Alle Slides analysieren</button>
+  <button type="button" class="btn-ai" id="btnAI" onclick="analyzeOne()">✨ Generieren</button>
+  <button type="button" class="btn-sec" id="btnAIAll" style="display:none;" onclick="analyzeAll()">✨ Alle Slides generieren</button>
   <div class="loader" id="loader"><span class="spinner">⚙</span> <span id="loaderTxt"> Claude denkt nach…</span></div>
 </div>
 
@@ -272,6 +287,14 @@ textarea{resize:none;}
     <div class="preview-sep"></div>
     <div class="preview-label">Ausgewähltes Design</div>
     <div class="preview-wrap" id="previewWrap"><canvas id="canvas"></canvas></div>
+    <div class="pos-hint" id="posHint">✋ Bild ziehen zum Verschieben · Motiv wird automatisch sichtbar gehalten</div>
+    <div class="pos-controls" id="posControls">
+      <button type="button" class="pos-btn" onclick="autoFocusSingle()">⊕ Auto-Fokus</button>
+      <button type="button" class="pos-btn" onclick="zoomSingle(-1)">➖ Zoom</button>
+      <button type="button" class="pos-btn" onclick="zoomSingle(1)">➕ Zoom</button>
+      <button type="button" class="pos-btn" onclick="resetPosSingle()">↻ Reset</button>
+      <button type="button" class="pos-btn pos-btn-swap" onclick="document.getElementById('fileInput').click()">🔄 Foto tauschen</button>
+    </div>
     <button type="button" class="btn-dl" id="btnDl" onclick="downloadSingle()">⬇ Bild speichern</button>
     <div class="change-area" id="singleChangeArea">
       <div class="change-hint">✏️ Etwas anpassen? KI ändert nur das Gewünschte.</div>
@@ -279,6 +302,13 @@ textarea{resize:none;}
         <textarea class="change-input" id="singleChangeInput" placeholder="z.B. &quot;Headline kürzer&quot; oder &quot;letztes Wort ändern zu XY&quot;"></textarea>
         <button type="button" class="btn-change" onclick="applyChangeSingle()">✏️ Anpassen</button>
       </div>
+    </div>
+    <div class="caption-block" id="singleCaptionBlock">
+      <div class="caption-label">📝 Posting-Text <span id="singleCaptionAuto" style="font-size:11px;color:rgba(245,240,232,0.45);"></span></div>
+      <textarea class="caption-textarea" id="singleCaptionText" placeholder="Wird automatisch generiert – oder schreib ihn selbst…" rows="6"></textarea>
+      <label class="caption-search"><input type="checkbox" id="singleCaptionSearch"> 🔎 kurz online recherchieren (Restaurant)</label>
+      <input type="text" class="caption-hint-input" id="singleCaptionHint" placeholder="Optional: Hinweis für die KI (Ton, Fokus, Emoji-Stil…)">
+      <button type="button" class="btn-gen-caption" onclick="genCaptionSingle(true)">🔄 Posting-Text neu generieren</button>
     </div>
   </div>
 </div>
@@ -325,14 +355,28 @@ textarea{resize:none;}
     <input type="text" id="videoSubline" placeholder="Subtext optional (z.B. Täglich ab 11:30 Uhr)" oninput="updateVideoPreview()"
       style="width:100%;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.18);border-radius:10px;color:#F5F0E8;padding:10px 12px;font-size:14px;font-family:inherit;box-sizing:border-box;margin-bottom:12px;">
 
-    <div class="video-preview-wrap" id="videoPreviewWrap">
-      <video id="previewVideo" playsinline loop muted style="max-height:400px;"></video>
+    <div class="video-preview-wrap pos" id="videoPreviewWrap" style="aspect-ratio:3/4;">
+      <video id="previewVideo" playsinline loop muted></video>
       <div class="video-text-overlay" id="videoOverlay">
         <span class="video-hl" id="videoHlPreview"></span>
         <span class="video-sub" id="videoSubPreview"></span>
       </div>
     </div>
+    <div class="pos-hint">✋ Video ziehen zum Verschieben · Ausschnitt wird so exportiert</div>
+    <div class="pos-controls">
+      <button type="button" class="pos-btn" onclick="zoomVideo(-1)">➖ Zoom</button>
+      <button type="button" class="pos-btn" onclick="zoomVideo(1)">➕ Zoom</button>
+      <button type="button" class="pos-btn" onclick="resetPosVideo()">↻ Reset</button>
+      <button type="button" class="pos-btn pos-btn-swap" onclick="document.getElementById('videoFileInput').click()">🔄 Video tauschen</button>
+    </div>
 
+    <div class="caption-block" id="videoCaptionBlock">
+      <div class="caption-label">📝 Posting-Text</div>
+      <textarea class="caption-textarea" id="videoCaptionText" placeholder="Posting-Text für das Video – generieren oder selbst schreiben…" rows="6"></textarea>
+      <label class="caption-search"><input type="checkbox" id="videoCaptionSearch"> 🔎 kurz online recherchieren (Restaurant)</label>
+      <input type="text" class="caption-hint-input" id="videoCaptionHint" placeholder="Optional: Hinweis für die KI (Ton, Fokus, Emoji-Stil…)">
+      <button type="button" class="btn-gen-caption" onclick="genCaptionVideo()">✨ Posting-Text generieren</button>
+    </div>
     <button type="button" class="btn-export-video" onclick="exportVideo()">⬇ Video mit Text exportieren</button>
     <div class="export-note" id="videoExportNote">Export läuft in Echtzeit (= Dauer des Videos)</div>
   </div>
@@ -354,6 +398,7 @@ textarea{resize:none;}
       <button type="button" class="btn-caption-refresh" id="btnCaptionRefresh" onclick="genCaption(true)" style="display:none;">🔄</button>
     </div>
     <textarea class="caption-textarea" id="captionText" placeholder="Hier erscheint dein generierter Posting-Text – oder schreib ihn direkt selbst…" rows="6"></textarea>
+    <label class="caption-search"><input type="checkbox" id="captionSearch"> 🔎 kurz online recherchieren (Restaurant)</label>
     <input type="text" class="caption-hint-input" id="captionHint" placeholder="Optional: Ergänzung / Hinweis für die KI (z.B. Ton, Emoji-Stil, Fokus…)">
     <button type="button" class="btn-gen-caption" id="btnGenCaption" onclick="genCaption(false)">✨ Posting-Text generieren</button>
   </div>
@@ -396,6 +441,15 @@ function renderCarouselGrid(){
         <textarea class="c-topic-input" id="cTopic_${i}" placeholder="Beschreibung für Slide ${i+1} – KI schreibt den Text dazu…">${s.topic||''}</textarea>
       </div>
       <div class="c-preview-outer" id="cPreview_${i}">${previewHtml}</div>
+      ${s.done?`
+      <div class="pos-hint">✋ Bild ziehen zum Verschieben · Motiv bleibt automatisch sichtbar</div>
+      <div class="c-pos-controls">
+        <button type="button" class="c-pos-btn" onclick="autoFocusC(${i})">⊕ Auto-Fokus</button>
+        <button type="button" class="c-pos-btn" onclick="zoomC(${i},-1)">➖</button>
+        <button type="button" class="c-pos-btn" onclick="zoomC(${i},1)">➕</button>
+        <button type="button" class="c-pos-btn" onclick="resetPosC(${i})">↻ Reset</button>
+        <button type="button" class="c-pos-btn pos-btn-swap" onclick="document.getElementById('cFile_${i}').click()">🔄 Foto tauschen</button>
+      </div>`:''}
       <div class="c-slide-btns">
         <button type="button" class="btn-gen-slide" onclick="genCSlide(${i})">${s.done?'🔄 Refresh':'✨ Generieren'}</button>
         ${s.done?`<button type="button" class="btn-dl-slide" onclick="downloadCSlide(${i})">⬇ Slide ${i+1}</button>`:''}
@@ -416,9 +470,18 @@ function renderCarouselGrid(){
     list.appendChild(card);
     const ta=document.getElementById('cTopic_'+i);
     if(ta)ta.addEventListener('input',e=>{cSlides[i].topic=e.target.value;});
-    if(s.done){requestAnimationFrame(()=>{drawCSlide(i);renderCSlideTemplates(i);});}
+    if(s.done){requestAnimationFrame(()=>{drawCSlide(i);renderCSlideTemplates(i);_bindCDrag(i);});}
   });
 }
+
+// Drag-Bindung für eine Carousel-Slide
+function _bindCDrag(i){
+  const canvas=document.getElementById('cCanvas_'+i);
+  _bindDrag(canvas,()=>cSlides[i],()=>({CW:1080,CH:1080}),()=>drawCSlide(i));
+}
+function autoFocusC(i){const s=cSlides[i];if(!s||!s.img)return;_autoFocus(s,1080,1080,s.tpl||tpl);drawCSlide(i);}
+function zoomC(i,dir){const s=cSlides[i];if(!s||!s.img)return;s.zoom=Math.min(4,Math.max(1,(s.zoom||1)+dir*0.2));s.focusAuto=false;drawCSlide(i);}
+function resetPosC(i){const s=cSlides[i];if(!s)return;s.zoom=1;s.panX=0;s.panY=0;s.focusAuto=false;drawCSlide(i);}
 
 function drawCSlide(i){
   const s=cSlides[i];
@@ -441,6 +504,8 @@ function setCSlideImg(i,file){
     image.onload=()=>{
       cSlides[i].img=image;
       cSlides[i].imgDataUrl=e.target.result;
+      cSlides[i].zoom=1;cSlides[i].panX=0;cSlides[i].panY=0;cSlides[i].focusAuto=true;
+      if(cSlides[i].done)_autoFocus(cSlides[i],1080,1080,cSlides[i].tpl||tpl);
       const thumb=document.getElementById('cThumb_'+i);
       if(thumb){
         thumb.style.backgroundImage='url('+e.target.result+')';
@@ -482,6 +547,7 @@ Antworte NUR mit einem gültigen JSON-Objekt:
     const raw=data.content[0].text.trim();
     const json=JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
     cSlides[i]={...cSlides[i],head1:json.head1||'',head2:json.head2||'',body:json.body||'',tpl:CTPLS[i%CTPLS.length],done:true};
+    if(cSlides[i].img&&cSlides[i].focusAuto!==false)_autoFocus(cSlides[i],1080,1080,cSlides[i].tpl);
     // Re-render card to show preview
     renderCarouselGrid();
     requestAnimationFrame(()=>{drawCSlide(i);renderCSlideTemplates(i);});
@@ -527,6 +593,7 @@ function renderCSlideTemplates(i){
     item.title=tplName;
     item.onclick=()=>{
       cSlides[i].tpl=tplName;
+      if(cSlides[i].focusAuto!==false&&cSlides[i].img)_autoFocus(cSlides[i],1080,1080,tplName);
       container.querySelectorAll('.c-tpl-item').forEach((el,j)=>el.classList.toggle('active',CTPLS[j]===tplName));
       requestAnimationFrame(()=>drawCSlide(i));
     };
@@ -691,7 +758,7 @@ window.addEventListener('load',()=>{
   updateStyleMemoryUI();
 });
 // ── Video Mode ──
-let videoFmt='feed', videoBlobURL=null;
+let videoFmt='feed', videoBlobURL=null, videoZoom=1, videoPosX=0.5, videoPosY=0.5;
 function onVideoFile(event){
   const file=event.target.files[0];
   if(!file)return;
@@ -699,19 +766,46 @@ function onVideoFile(event){
   videoBlobURL=URL.createObjectURL(file);
   const vid=document.getElementById('previewVideo');
   vid.src=videoBlobURL;vid.load();
+  vid.play().catch(()=>{});
   document.getElementById('videoUpLbl').textContent='✓ '+file.name;
   document.getElementById('videoUploadZone').style.borderColor='#F97545';
   document.getElementById('videoEditArea').style.display='block';
   updateVideoPreview();
+  applyVideoTransform();
+  _bindVideoDrag();
 }
 function setVideoFmt(fmt,btn){
   videoFmt=fmt;
   document.querySelectorAll('.video-fmt-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  const wrap=document.getElementById('videoPreviewWrap');
+  if(wrap)wrap.style.aspectRatio=(fmt==='story')?'9/16':'3/4';
+  applyVideoTransform();
 }
 function updateVideoPreview(){
   document.getElementById('videoHlPreview').textContent=document.getElementById('videoHeadline').value;
   document.getElementById('videoSubPreview').textContent=document.getElementById('videoSubline').value;
+}
+// ── Video-Positionierung: Preview spiegelt Export-Ausschnitt (object-position + Zoom) ──
+function applyVideoTransform(){
+  const vid=document.getElementById('previewVideo'); if(!vid)return;
+  vid.style.objectPosition=(videoPosX*100).toFixed(1)+'% '+(videoPosY*100).toFixed(1)+'%';
+  vid.style.transform='scale('+(videoZoom||1)+')';
+  vid.style.transformOrigin=(videoPosX*100).toFixed(1)+'% '+(videoPosY*100).toFixed(1)+'%';
+}
+function zoomVideo(dir){videoZoom=Math.min(4,Math.max(1,(videoZoom||1)+dir*0.2));applyVideoTransform();}
+function resetPosVideo(){videoZoom=1;videoPosX=0.5;videoPosY=0.5;applyVideoTransform();}
+function _bindVideoDrag(){
+  const vid=document.getElementById('previewVideo'); if(!vid||vid._dragBound)return; vid._dragBound=true;
+  let active=false,lx=0,ly=0;
+  vid.addEventListener('pointerdown',e=>{active=true;vid.setPointerCapture(e.pointerId);lx=e.clientX;ly=e.clientY;e.preventDefault();});
+  vid.addEventListener('pointermove',e=>{if(!active)return;const r=vid.getBoundingClientRect();
+    // Finger nach rechts -> Bild nach rechts -> linke Seite sichtbar -> posX kleiner
+    videoPosX=Math.min(1,Math.max(0,videoPosX-(e.clientX-lx)/r.width));
+    videoPosY=Math.min(1,Math.max(0,videoPosY-(e.clientY-ly)/r.height));
+    lx=e.clientX;ly=e.clientY;applyVideoTransform();e.preventDefault();});
+  const end=()=>{active=false;};
+  vid.addEventListener('pointerup',end);vid.addEventListener('pointercancel',end);
 }
 async function exportVideo(){
   if(!videoBlobURL){alert('Bitte zuerst ein Video hochladen.');return;}
@@ -760,11 +854,12 @@ async function exportVideo(){
 
   function drawFrame(){
     if(vid.ended||vid.paused){recorder.stop();return;}
-    // Cover-fit video onto canvas
-    const vAr=vid.videoWidth/vid.videoHeight,cAr=CW/CH;
-    let sx=0,sy=0,sw=vid.videoWidth,sh=vid.videoHeight;
-    if(vAr>cAr){sw=sh*cAr;sx=(vid.videoWidth-sw)/2;}
-    else{sh=sw/cAr;sy=(vid.videoHeight-sh)/2;}
+    // Cover-fit video onto canvas + Zoom & Position (spiegelt Preview)
+    const vw=vid.videoWidth,vh=vid.videoHeight;
+    const scale=Math.max(CW/vw,CH/vh)*(videoZoom||1);
+    const sw=CW/scale, sh=CH/scale;
+    const sx=(vw-sw)*(videoPosX==null?0.5:videoPosX);
+    const sy=(vh-sh)*(videoPosY==null?0.5:videoPosY);
     ctx.drawImage(vid,sx,sy,sw,sh,0,0,CW,CH);
 
     if(headline){
@@ -850,31 +945,49 @@ function renderTabs(){
   slides.forEach((s,i)=>{const b=document.createElement('button');b.className='slide-tab'+(i===cur?' active':'');b.textContent='Slide '+(i+1)+(s.img?' 📷':'')+(s.done?' ✓':'');b.onclick=()=>{saveCur();loadSlide(i);renderTabs();};tabs.appendChild(b);});
   if(slides.length<4){const a=document.createElement('button');a.className='slide-tab add-btn';a.textContent='+ Slide';a.onclick=()=>{saveCur();slides.push(mkSlide());cur=slides.length-1;renderTabs();loadSlide(cur);updateZip();};tabs.appendChild(a);}
 }
-function renderDots(){const p=document.getElementById('slideDots');if(!carousel||slides.length<2){p.innerHTML='';return;}p.innerHTML=slides.map((_,i)=>`<div class="dot${i===cur?' active':''}"></div>`).join('');}
+function renderDots(){const p=document.getElementById('slideDots');if(!p)return;if(!carousel||slides.length<2){p.innerHTML='';return;}p.innerHTML=slides.map((_,i)=>`<div class="dot${i===cur?' active':''}"></div>`).join('');}
 function updateZip(){document.getElementById('btnZip').style.display=(carousel&&slides.length>1)?'block':'none';}
 
 // ── File ──
-function onFile(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{slides[cur].img=img;slides[cur].imgName=file.name;document.getElementById('uploadZone').classList.add('has-img');document.getElementById('upLbl').textContent='✓ Foto geladen';document.getElementById('upSub').textContent=file.name;if(carousel)renderTabs();if(variants.length)renderGrid();};img.src=ev.target.result;};r.readAsDataURL(file);e.target.value='';}
+function onFile(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{
+  const s=slides[cur];
+  s.img=img;s.imgName=file.name;s.imgDataUrl=ev.target.result;
+  s.zoom=1;s.panX=0;s.panY=0;s.focusAuto=true;
+  document.getElementById('uploadZone').classList.add('has-img');
+  document.getElementById('upLbl').textContent='✓ Foto geladen';
+  document.getElementById('upSub').textContent=file.name;
+  if(carousel)renderTabs();
+  if(variants.length)renderGrid();
+  // Falls bereits eine Vorschau sichtbar ist: Foto in-place tauschen (Texte & Vorlage bleiben)
+  if(document.getElementById('selectedPreviewWrap').style.display!=='none'){
+    const {CW,CH}=_singleDims();_autoFocus(s,CW,CH,tpl);repaintSingle();_afterSinglePreview();
+  }
+};img.src=ev.target.result;};r.readAsDataURL(file);e.target.value='';}
 
 // ── SYSTEM_PROMPT (auto-updated by scheduled task – DO NOT EDIT MANUALLY) ──
-const SYSTEM_PROMPT=`Du bist der Post-Creator für "Mittags-Geheimtipps Graz" (Instagram/Facebook).
+const SYSTEM_PROMPT=`Du bist der Post-Creator fuer "Mittags-Geheimtipps Graz" (Instagram/Facebook).
+Ausgabe auf Deutsch mit korrekten Umlauten.
 
-WICHTIG: Verwende immer korrekte deutsche Umlaute (ä, ö, ü, ß) – niemals ae/oe/ue!
-
-REGELN (STRIKT):
-- Headline = konkreter Hook (Gericht, Besonderheit, Tradition) – groß und sofort lesbar
-- Body = atmosphärisch/emotional, macht neugierig WO das ist
-- KEIN Lokalname im Bild-Text (Neugier wecken, Auflösung nur in Caption)
+REGELN BILD-TEXT (STRIKT):
+- Headline = konkreter Hook (Gericht, Besonderheit, Tradition) – gross und sofort lesbar
+- Body = atmosphaerisch/emotional, macht neugierig WO das ist
+- Reihenfolge: konkreter Hook als grosse Headline, Vibe/Atmosphaere kleiner als Body darunter – NICHT umgekehrt
+- KEIN Lokalname/Adresse im Bild (Neugier wecken, Aufloesung nur in Caption)
 - Kein Marketing-Speak ("mit Saison & Handwerk") – konkret ODER Vibe, nie beides
-- Keine absoluten Superlative ("am schönsten") – immer "einer der schönsten"
-- NIE Text über Gesichter oder Hauptgerichte
-- Gold-Standard: Headline "Hier gibt's jeden Mittwoch Cordon Bleu." / Body "Dafür merkt man sich den Mittwoch."
+- Keine absoluten Superlative ("am schoensten") – immer "einer der schoensten"
+- NIE Text ueber Gesichter oder Hauptgerichte legen
+- Keine Nummerierung im Label oder Headline (NIE "#001", "#002" etc.)
+- NIE Graz implizit abwerten ("kurz nicht mehr in Graz sein" etc.)
+- Positiv auf Graz einzahlen
+- CTAs nur wenn natuerlich & sympathisch – keine aufgesetzten CTAs
+- NIE "Kennst du einen besseren Platz?" – wertet das gefeatuerte Restaurant ab
+- Gold-Standard: Headline "Hier gibt's jeden Mittwoch Cordon Bleu." / Body "Dafuer merkt man sich den Mittwoch."
 
 VORLAGEN:
 - E: ZDF-Stil Square 1:1, Doppelgradient (unten stark + oben subtil), Text ab 66% – STANDARD
-- D1: ZDF-Stil Feed Square, nur Untengradient – für helle gleichmäßige Fotos
-- D2: ZDF-Stil Story 9:16 – für Portrait-Fotos
-- D3: ZDF-Stil Square – wenn Ort/Atmosphäre Vordergrund statt Gericht
+- D1: ZDF-Stil Feed Square, nur Untengradient – fuer helle gleichmaessige Fotos
+- D2: ZDF-Stil Story 9:16 – fuer Portrait-Fotos
+- D3: ZDF-Stil Square – wenn Ort/Atmosphaere Vordergrund statt Gericht
 - A: Card-Stil Feed – wenn viele Infos aufs Bild sollen
 - B: Card-Stil Story 9:16
 - VD: Minimal, nur zentrierter Headline-Text, kein Label
@@ -1058,12 +1171,55 @@ function _wrap(ctx,text,maxWidth){
   if(cur)lines.push(cur);return lines;
 }
 
+// ── Bild-Positionierung: Cover-Fit + freies Pan (panX/panY als Bruchteil der Canvas) + Zoom ──
+// Liefert die berechnete Geometrie (für Drag-Umrechnung wiederverwendbar)
+function _imgGeom(img,CW,CH,zoom,panX,panY){
+  const z=Math.max(1,zoom||1);
+  const scale=Math.max(CW/img.width,CH/img.height)*z;
+  const dw=img.width*scale, dh=img.height*scale;
+  let dx=(CW-dw)/2 + (panX||0)*CW;
+  let dy=(CH-dh)/2 + (panY||0)*CH;
+  // Clamp: Canvas muss immer vollständig bedeckt bleiben
+  dx=Math.min(0,Math.max(CW-dw,dx));
+  dy=Math.min(0,Math.max(CH-dh,dy));
+  return {dx,dy,dw,dh,scale};
+}
 function _cropDraw(s,ctx,CW,CH){
-  let sx=0,sy=0,sw=s.img.width,sh=s.img.height;
-  const tR=CW/CH,sR=sw/sh;
-  if(sR>tR){sw=Math.round(sh*tR);if(s.crop==='center')sx=Math.round((s.img.width-sw)/2);else if(s.crop==='top')sx=s.img.width-sw;}
-  else{sh=Math.round(sw/tR);if(s.crop==='bottom')sy=s.img.height-sh;else if(s.crop==='center')sy=Math.round((s.img.height-sh)/2);}
-  ctx.drawImage(s.img,sx,sy,sw,sh,0,0,CW,CH);
+  if(!s.img)return;
+  const g=_imgGeom(s.img,CW,CH,s.zoom,s.panX,s.panY);
+  ctx.drawImage(s.img,0,0,s.img.width,s.img.height,g.dx,g.dy,g.dw,g.dh);
+}
+
+// ── Auto-Fokus: erkennt das Hauptmotiv (Sättigung+Kontrast) und schiebt es in die sichtbare Zone ──
+function _autoFocus(s,CW,CH,tpl){
+  const img=s&&s.img; if(!img)return;
+  try{
+    const N=48; const oc=document.createElement('canvas');oc.width=N;oc.height=N;
+    const octx=oc.getContext('2d');octx.drawImage(img,0,0,N,N);
+    const d=octx.getImageData(0,0,N,N).data;
+    const L=new Float32Array(N*N);
+    for(let i=0,p=0;i<d.length;i+=4,p++){L[p]=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];}
+    function sat(r,g,b){const mx=Math.max(r,g,b),mn=Math.min(r,g,b);return mx===0?0:(mx-mn)/mx;}
+    const rowS=new Float32Array(N), colS=new Float32Array(N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+      const i=(y*N+x)*4;
+      const sc=sat(d[i],d[i+1],d[i+2])*140
+        + (x<N-1?Math.abs(L[y*N+x]-L[y*N+x+1]):0)
+        + (y<N-1?Math.abs(L[y*N+x]-L[(y+1)*N+x]):0);
+      rowS[y]+=sc; colS[x]+=sc;
+    }
+    let rn=0,rd=0,cn=0,cd=0;
+    for(let k=0;k<N;k++){rn+=k*rowS[k];rd+=rowS[k];cn+=k*colS[k];cd+=colS[k];}
+    const fy=rd?(rn/rd)/N:0.5, fx=cd?(cn/cd)/N:0.5; // Motiv-Schwerpunkt im Bild (0..1)
+    // Zielzone: bei Card-Vorlagen (A/B) Text ab ~52% -> Motiv höher; sonst Text ab ~64%
+    const targetY=(tpl==='A'||tpl==='B')?0.30:0.40, targetX=0.5;
+    const z=Math.max(1,s.zoom||1);
+    const scale=Math.max(CW/img.width,CH/img.height)*z;
+    const dw=img.width*scale, dh=img.height*scale;
+    s.panY=(targetY*CH - fy*dh - (CH-dh)/2)/CH;
+    s.panX=(targetX*CW - fx*dw - (CW-dw)/2)/CW;
+    s.focusAuto=true;
+  }catch(e){ /* getImageData kann bei Cross-Origin scheitern – dann neutral lassen */ }
 }
 
 function _autoLabelColor(ctx,tx,ty){
@@ -1273,8 +1429,12 @@ function selectVariant(i){
   pw.className=isStory?'preview-wrap story':'preview-wrap';
   pw.style.display='block';
   const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,CW,CH);
+  if(slides[cur].img&&slides[cur].focusAuto!==false){_autoFocus(slides[cur],CW,CH,v.template);}
   drawSlide({...slides[cur],label:v.label,head1:v.head1,head2:v.head2,body:v.body},ctx,CW,CH,v.template);
   document.getElementById('selectedPreviewWrap').style.display='block';
+  _afterSinglePreview();
+  const capTa=document.getElementById('singleCaptionText');
+  if(capTa&&!capTa.value.trim())genCaptionSingle(false);
   document.getElementById('btnDl').style.display='block';
   // Vorlage-Tauschen einblenden
   document.getElementById('tplSwapSection').classList.add('vis');
@@ -1288,8 +1448,43 @@ function renderManual(){
   const canvas=document.getElementById('canvas');canvas.width=CW;canvas.height=CH;
   const pw=document.getElementById('previewWrap');pw.className=isStory?'preview-wrap story':'preview-wrap';pw.style.display='block';
   const ctx=canvas.getContext('2d');ctx.clearRect(0,0,CW,CH);
-  if(drawSlide(slides[cur],ctx,CW,CH,tpl)){document.getElementById('btnDl').style.display='block';document.getElementById('selectedPreviewWrap').style.display='block';}
+  if(drawSlide(slides[cur],ctx,CW,CH,tpl)){document.getElementById('btnDl').style.display='block';document.getElementById('selectedPreviewWrap').style.display='block';_afterSinglePreview();}
   else{alert('Bitte zuerst Foto hochladen.');}
+}
+
+// ── Bild-Positionierung Einzelbild: Repaint + Steuerung + Drag ──
+function _singleDims(){const isStory=fmt==='story';return{CW:1080,CH:isStory?1920:(carousel?1080:1440)};}
+function repaintSingle(){
+  const s=slides[cur]; if(!s||!s.img)return;
+  const {CW,CH}=_singleDims();
+  const canvas=document.getElementById('canvas'); if(!canvas)return;
+  canvas.width=CW;canvas.height=CH;
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,CW,CH);
+  drawSlide(s,ctx,CW,CH,tpl);
+}
+function _afterSinglePreview(){
+  const s=slides[cur]; if(!s)return;
+  const ctrls=document.getElementById('posControls'),hint=document.getElementById('posHint');
+  if(s.img){if(ctrls)ctrls.style.display='flex';if(hint)hint.style.display='block';}
+  else{if(ctrls)ctrls.style.display='none';if(hint)hint.style.display='none';}
+  _bindDrag(document.getElementById('canvas'),
+    ()=>slides[cur],
+    ()=>_singleDims(),
+    ()=>repaintSingle());
+}
+function autoFocusSingle(){const s=slides[cur];if(!s||!s.img)return;const {CW,CH}=_singleDims();_autoFocus(s,CW,CH,tpl);repaintSingle();if(variants.length)renderGrid();}
+function zoomSingle(dir){const s=slides[cur];if(!s||!s.img)return;s.zoom=Math.min(4,Math.max(1,(s.zoom||1)+dir*0.2));s.focusAuto=false;repaintSingle();if(variants.length)renderGrid();}
+function resetPosSingle(){const s=slides[cur];if(!s)return;s.zoom=1;s.panX=0;s.panY=0;s.focusAuto=false;repaintSingle();if(variants.length)renderGrid();}
+
+// Generische Drag-Bindung (Touch + Maus) für ein Canvas. getS liefert Slide-Objekt, getDims {CW,CH}, redraw().
+function _bindDrag(canvas,getS,getDims,redraw){
+  if(!canvas||canvas._dragBound)return; canvas._dragBound=true;
+  let active=false,lastX=0,lastY=0;
+  const toInternal=(clientX,clientY)=>{const r=canvas.getBoundingClientRect();const {CW,CH}=getDims();return{x:(clientX-r.left)*CW/r.width,y:(clientY-r.top)*CH/r.height};};
+  canvas.addEventListener('pointerdown',e=>{const s=getS();if(!s||!s.img)return;active=true;canvas.setPointerCapture(e.pointerId);const p=toInternal(e.clientX,e.clientY);lastX=p.x;lastY=p.y;e.preventDefault();});
+  canvas.addEventListener('pointermove',e=>{if(!active)return;const s=getS();if(!s)return;const {CW,CH}=getDims();const p=toInternal(e.clientX,e.clientY);s.panX=(s.panX||0)+(p.x-lastX)/CW;s.panY=(s.panY||0)+(p.y-lastY)/CH;s.focusAuto=false;lastX=p.x;lastY=p.y;redraw();e.preventDefault();});
+  const end=()=>{active=false;};
+  canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);canvas.addEventListener('pointerleave',end);
 }
 
 // Downloads
@@ -1300,6 +1495,7 @@ async function genCaption(isRefresh){
   const refreshBtn=document.getElementById('btnCaptionRefresh');
   const ta=document.getElementById('captionText');
   const hint=(document.getElementById('captionHint').value||'').trim();
+  const resto=_restaurantInfo();const useSearch=!!(document.getElementById('captionSearch')&&document.getElementById('captionSearch').checked);
 
   // Collect all slide content
   const slideInfos=cSlides.map((s,i)=>{
@@ -1322,7 +1518,7 @@ async function genCaption(isRefresh){
 
   const systemPrompt=`Du bist Social-Media-Texter für den Instagram-Account "Mittags-Geheimtipps Graz" – ein Community-Account der die besten Mittagessen in Graz zeigt. Schreibe einen authentischen, sympathischen und leicht österreichisch-casual Instagram-Posting-Text für ein Karussell-Post. Stil: warm, persönlich, nicht zu werberisch, max. 3-4 kurze Absätze inkl. Hashtags am Ende. Nutze passende Emojis, aber sparsam.`;
 
-  const userPrompt=`Hier sind die Inhalte der Karussell-Slides:
+  const userPrompt=`${resto?'Lokal (für Kontext/Recherche): '+resto+'\n\n':''}Hier sind die Inhalte der Karussell-Slides:
 
 ${slideInfos}${hint?'\n\nZusätzliche Hinweise: '+hint:''}\n\nSchreibe jetzt den Posting-Text.${isRefresh?'\n(Neue Version – bitte anders formulieren als ein möglicher vorheriger Entwurf.)':''}`;
 
@@ -1341,12 +1537,13 @@ ${slideInfos}${hint?'\n\nZusätzliche Hinweise: '+hint:''}\n\nSchreibe jetzt den
         model:'claude-haiku-4-5',
         max_tokens:800,
         system:systemPrompt,
-        messages:[{role:'user',content:userPrompt}]
+        messages:[{role:'user',content:userPrompt}],
+        ...(useSearch?{tools:[{type:'web_search_20250305',name:'web_search',max_uses:3}]}:{})
       })
     });
     const data=await resp.json();
     if(data.error) throw new Error(data.error.message);
-    ta.value=data.content[0].text.trim();
+    ta.value=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
     refreshBtn.style.display='inline-block';
   }catch(e){
     alert('Fehler: '+e.message);
@@ -1354,6 +1551,60 @@ ${slideInfos}${hint?'\n\nZusätzliche Hinweise: '+hint:''}\n\nSchreibe jetzt den
     btn.disabled=false;
     btn.textContent='✨ Posting-Text generieren';
   }
+}
+
+// ── Caption-Generierung (Einzel & Video, mit optionaler Online-Recherche) ──
+function _restaurantInfo(){const el=document.getElementById('restaurantInput');return el?(el.value||'').trim():'';}
+const CAPTION_SYSTEM=`Du bist Social-Media-Texter fuer den Instagram-Account "Mittags-Geheimtipps Graz" – ein Community-Account, der die besten Mittagessen in Graz zeigt. Schreibe einen authentischen, sympathischen, leicht oesterreichisch-casualen Instagram-Posting-Text. Stil: warm, persoenlich, nicht werberisch, max. 3-4 kurze Absaetze + 5-8 lokale Hashtags am Ende (z.B. #mittagsgraz #grazisst #geheimtippgraz). Emojis sparsam. Erfinde KEINE Fakten – wenn etwas unsicher ist, bleib allgemein.`;
+async function _captionApi(contentText,opts){
+  opts=opts||{};
+  const k=localStorage.getItem('mgk_k');
+  if(!k)throw new Error('Kein API Key gespeichert!');
+  const resto=_restaurantInfo();
+  const user=`${resto?'Lokal (fuer Kontext/Recherche): '+resto+'\n\n':''}${contentText}${opts.hint?'\n\nHinweis: '+opts.hint:''}${(opts.useSearch&&resto)?'\n\nRecherchiere kurz aktuelle, verifizierbare Infos zum Lokal (Spezialitaet, Lage, Besonderheit) und baue nur Gesichertes ein.':''}\n\nSchreibe jetzt den fertigen Posting-Text.${opts.isRefresh?' (Neue, anders formulierte Version.)':''}`;
+  const reqBody={model:'claude-haiku-4-5',max_tokens:800,system:CAPTION_SYSTEM,messages:[{role:'user',content:user}]};
+  if(opts.useSearch)reqBody.tools=[{type:'web_search_20250305',name:'web_search',max_uses:3}];
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true','content-type':'application/json'},body:JSON.stringify(reqBody)});
+  const data=await resp.json();
+  if(data.error)throw new Error(data.error.message);
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+}
+async function genCaptionSingle(isRefresh){
+  const s=slides[cur];
+  const ta=document.getElementById('singleCaptionText'); if(!ta)return;
+  if(!s||(!s.head1&&!s.head2&&!s.body&&!((s.idea||'').trim()))){if(isRefresh)alert('Bitte zuerst einen Post generieren.');return;}
+  const parts=[];
+  if(s.idea&&s.idea.trim())parts.push('Idee: '+s.idea.trim());
+  if(s.label)parts.push('Label: '+s.label);
+  if(s.head1)parts.push('Headline: '+s.head1);
+  if(s.head2)parts.push('Subline: '+s.head2);
+  if(s.body)parts.push('Bildtext: '+s.body);
+  const hintEl=document.getElementById('singleCaptionHint');
+  const hint=hintEl?(hintEl.value||'').trim():'';
+  const useSearch=!!(document.getElementById('singleCaptionSearch')&&document.getElementById('singleCaptionSearch').checked);
+  const badge=document.getElementById('singleCaptionAuto');
+  if(badge)badge.textContent=isRefresh?'· wird generiert…':'· wird automatisch generiert…';
+  try{
+    ta.value=await _captionApi('Inhalte des Posts:\n'+parts.join('\n'),{hint:hint,useSearch:useSearch,isRefresh:isRefresh});
+  }catch(e){if(isRefresh)alert('Fehler: '+e.message);else console.error('Caption:',e.message);}
+  finally{if(badge)badge.textContent='';}
+}
+async function genCaptionVideo(){
+  const ta=document.getElementById('videoCaptionText'); if(!ta)return;
+  const hl=(document.getElementById('videoHeadline').value||'').trim();
+  const sub=(document.getElementById('videoSubline').value||'').trim();
+  const hintEl=document.getElementById('videoCaptionHint');
+  const hint=hintEl?(hintEl.value||'').trim():'';
+  const useSearch=!!(document.getElementById('videoCaptionSearch')&&document.getElementById('videoCaptionSearch').checked);
+  const parts=[];
+  if(hl)parts.push('Headline im Video: '+hl);
+  if(sub)parts.push('Subtext im Video: '+sub);
+  const btn=document.querySelector('#videoCaptionBlock .btn-gen-caption');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Generiere…';}
+  try{
+    ta.value=await _captionApi('Es geht um ein Mittags-Video.'+(parts.length?'\n'+parts.join('\n'):''),{hint:hint,useSearch:useSearch});
+  }catch(e){alert('Fehler: '+e.message);}
+  finally{if(btn){btn.disabled=false;btn.textContent='✨ Posting-Text generieren';}}
 }
 
 async function renderAllZip(){
